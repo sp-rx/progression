@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Multifocal Power Distribution</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:32px 20px;
+  background:#f5f1e8;
+  color:#333;
+  font-family:Arial,sans-serif;
+}
+
+.app{
+  width:100%;
+  max-width:900px;
+  margin:auto
+}
+
+h1{
+  margin:0 0 20px;
+  font-size:22px;
+  font-weight:500
+}
+
+.panel{
+  background:#fffdf7;
+  border:1px solid #ddd6c9;
+  border-radius:10px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.sectionTitle{
+  margin:0 0 10px;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:1.2px;
+  color:#777;
+}
+
+.panelRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.inputs{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.control{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.control label{
+  font-size:11px;
+  color:#666;
+}
+
+input,select{
+  width:76px;
+  height:34px;
+  padding:6px 8px;
+  border:1px solid #bbb4a8;
+  border-radius:5px;
+  background:#fff;
+  color:#333;
+  font-size:14px;
+  text-align:center;
+}
+
+select{
+  width:82px;
+  cursor:pointer
+}
+
+.unit{
+  font-size:12px;
+  color:#777
+}
+
+.toggle{
+  display:flex;
+  gap:3px;
+  padding:3px;
+  background:#eee9df;
+  border-radius:6px;
+}
+
+.toggle button{
+  border:0;
+  padding:6px 10px;
+  border-radius:4px;
+  background:transparent;
+  color:#666;
+  font-size:10px;
+  cursor:pointer;
+}
+
+.toggle button.active{
+  background:#fffdf7;
+  color:#333;
+  box-shadow:0 1px 2px rgba(0,0,0,.08);
+}
+
+/* LENS HEADERS */
+
+.lensTitles{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:70px;
+  margin:26px 0 10px;
+}
+
+.lensTitle{
+  text-align:center;
+  font-size:11px;
+  letter-spacing:1px;
+  color:#555;
+}
+
+.design2Title{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+.corridorSelect{
+  width:72px;
+  height:28px;
+  font-size:11px;
+  padding:3px 6px;
+}
+
+/* GRAPHS */
+
+.graphs{
+  display:flex;
+  justify-content:center;
+  gap:70px;
+}
+
+.graph{
+  display:flex;
+  align-items:flex-start
+}
+
+.ruler{
+  position:relative;
+  width:50px;
+  height:600px
+}
+
+.mm{
+  position:absolute;
+  right:10px;
+  transform:translateY(-50%);
+  font-size:10px;
+  color:#777
+}
+
+.tick{
+  position:absolute;
+  right:0;
+  width:8px;
+  height:1px;
+  background:#777
+}
+
+.plot{
+  position:relative;
+  width:220px;
+  height:600px;
+  overflow:visible;
+  background:#fffdf7;
+  border:1px solid #aaa296;
+  border-radius:3px;
+}
+
+.heat{
+  position:absolute;
+  left:0;
+  width:100%;
+  pointer-events:none
+}
+
+.line{
+  position:absolute;
+  left:0;
+  width:100%;
+  height:1px;
+  background:rgba(60,60,60,.7)
+}
+
+.label{
+  position:absolute;
+  left:calc(100% + 10px);
+  transform:translateY(-50%);
+  white-space:nowrap;
+  font-size:10px;
+  color:#555
+}
+
+.zoneLabel{
+  position:absolute;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:10px;
+  letter-spacing:1px;
+  color:#333;
+  background:#fffdf7;
+  padding:3px 6px;
+  border-radius:3px;
+  pointer-events:none
+}
+
+/* MARKERS */
+
+.cMarker{
+  position:absolute;
+  left:50%;
+  width:50px;
+  height:50px;
+  transform:translate(-50%,-50%);
+  border:2px solid #555;
+  border-bottom-color:transparent;
+  border-radius:50%;
+  pointer-events:none
+}
+
+.crossMarker{
+  position:absolute;
+  left:50%;
+  width:18px;
+  height:18px;
+  transform:translate(-50%,-50%);
+  pointer-events:none
+}
+
+.crossMarker:before,
+.crossMarker:after{
+  content:"";
+  position:absolute;
+  background:#555
+}
+
+.crossMarker:before{
+  left:50%;
+  top:0;
+  width:2px;
+  height:100%;
+  transform:translateX(-50%)
+}
+
+.crossMarker:after{
+  left:0;
+  top:50%;
+  width:100%;
+  height:2px;
+  transform:translateY(-50%)
+}
+
+.completeCircle{
+  position:absolute;
+  left:50%;
+  width:64px;
+  height:64px;
+  transform:translate(-50%,-50%);
+  border:2px solid #555;
+  border-radius:50%;
+  pointer-events:none
+}
+
+@media(max-width:760px){
+
+  body{
+    padding:24px 10px
+  }
+
+  .panelRow{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:12px
+  }
+
+  .lensTitles{
+    gap:35px
+  }
+
+  .graphs{
+    gap:35px
+  }
+
+  .plot{
+    width:190px
+  }
+}
+
+@media(max-width:560px){
+
+  .lensTitles{
+    gap:18px
+  }
+
+  .graphs{
+    gap:18px
+  }
+
+  .ruler{
+    width:40px
+  }
+
+  .plot{
+    width:155px
+  }
+
+  .label{
+    left:calc(100% + 7px);
+    font-size:9px
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<h1>Multifocal Power Distribution</h1>
+
+<!-- PANEL 1 -->
+<div class="panel">
+
+  <div class="sectionTitle">PRESCRIPTION & DISPLAY</div>
+
+  <div class="panelRow">
+
+    <div class="inputs">
+
+      <div class="control">
+        <label for="far">FAR RX</label>
+        <input id="far" type="number" value="-2.00" step="0.25">
+        <span class="unit">D</span>
+      </div>
+
+      <div class="control">
+        <label for="add">ADD</label>
+        <input id="add" type="number" value="2.00" min="0.25" step="0.25">
+        <span class="unit">D</span>
+      </div>
+
+    </div>
+
+    <div class="toggle">
+      <button id="addMode" class="active">ADD</button>
+      <button id="finalMode">FINAL</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- PANEL 2 -->
+<div class="panel">
+
+  <div class="sectionTitle">HEAT MAP & LENS DESIGN</div>
+
+  <div class="panelRow">
+
+    <div class="inputs">
+
+      <div class="control">
+        <label for="selectedAdd">HEATMAP MAX ADD</label>
+        <input id="selectedAdd" type="number" value="3.00" min="0.25" step="0.25">
+        <span class="unit">D</span>
+      </div>
+
+    </div>
+
+    <div class="toggle">
+      <button id="relativeMode" >RELATIVE</button>
+      <button id="selectedMode" class="active">SELECTED</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- LENS TITLES -->
+<div class="lensTitles">
+
+  <div class="lensTitle">
+    DESIGN 1
+  </div>
+
+  <div class="lensTitle design2Title">
+    <span>DESIGN 2</span>
+
+    <select id="corridor" class="corridorSelect">
+      <option value="9">9 MM</option>
+      <option value="11" selected>11 MM</option>
+      <option value="13">13 MM</option>
+      <option value="15">15 MM</option>
+    </select>
+  </div>
+
+</div>
+
+<!-- TWO LENSES -->
+<div class="graphs">
+
+  <div class="graph">
+    <div id="ruler1" class="ruler"></div>
+    <div id="plot1" class="plot"></div>
+  </div>
+
+  <div class="graph">
+    <div id="ruler2" class="ruler"></div>
+    <div id="plot2" class="plot"></div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+const farInput=document.getElementById("far");
+const addInput=document.getElementById("add");
+const selectedAddInput=document.getElementById("selectedAdd");
+const corridorInput=document.getElementById("corridor");
+
+const addMode=document.getElementById("addMode");
+const finalMode=document.getElementById("finalMode");
+
+const relativeMode=document.getElementById("relativeMode");
+const selectedMode=document.getElementById("selectedMode");
+
+const plots=[
+  document.getElementById("plot1"),
+  document.getElementById("plot2")
+];
+
+const rulers=[
+  document.getElementById("ruler1"),
+  document.getElementById("ruler2")
+];
+
+const HEIGHT=50;
+
+let mode="add";
+let heatMode="selected";
+
+function y(mm){
+  return mm/HEIGHT*100
+}
+
+/* DESIGN 1
+   10 mm = 0%
+   20 mm = 12%
+   38 mm = 100%
+*/
+
+function percent1(mm){
+
+  if(mm<=10)return 0;
+
+  if(mm<=20)
+    return (mm-10)/10*12;
+
+  if(mm<=38)
+    return 12+(mm-20)/18*88;
+
+  return 100;
+}
+
+function mmAtPercent1(p){
+
+  if(p<=12)
+    return 10+(p/12)*10;
+
+  return 20+((p-12)/88)*18;
+}
+
+/* DESIGN 2
+   21 mm = 0%
+   corridor end = 100%
+*/
+
+function percent2(mm,corridor){
+
+  const end=21+corridor;
+
+  if(mm<=21)return 0;
+
+  if(mm<=end)
+    return (mm-21)/corridor*100;
+
+  return 100;
+}
+
+function mmAtPercent2(p,corridor){
+
+  return 21+(p/100)*corridor;
+}
+
+function formatPower(v){
+
+  const n=Math.round(v*100)/100;
+
+  return (n>0?"+":"")+n.toFixed(2)+" D";
+}
+
+/* SAME HEAT COLOURS */
+
+function heatColor(power,reference){
+
+  if(power<=0)
+    return "#fffdf7";
+
+  const level=Math.floor(power/.25)*.25;
+
+  let t=reference>0
+    ?level/reference
+    :0;
+
+  t=Math.max(0,Math.min(1,t));
+
+  if(t<=.0625)return "#edf5ef";
+  if(t<=.125)return "#e2eee5";
+  if(t<=.1875)return "#d7e8db";
+  if(t<=.25)return "#cce2d1";
+  if(t<=.3125)return "#c0dcc7";
+  if(t<=.375)return "#b4d6bd";
+  if(t<=.4375)return "#a7cfb3";
+  if(t<=.50)return "#9bc9aa";
+  if(t<=.5625)return "#8fc2a0";
+  if(t<=.625)return "#82bb96";
+  if(t<=.6875)return "#76b48c";
+  if(t<=.75)return "#69ac82";
+  if(t<=.8125)return "#5da578";
+  if(t<=.875)return "#509e6e";
+  if(t<1)return "#449664";
+
+  return "#3a8d5b";
+}
+
+/* DESIGN 1 HEAT */
+
+function drawHeat1(plot,add){
+
+  const reference=
+    heatMode==="relative"
+      ?add
+      :Math.max(.25,parseFloat(selectedAddInput.value)||.25);
+
+  let mm=0;
+
+  while(mm<50){
+
+    let power=0;
+    let next=mm+.25;
+
+    if(mm<10){
+
+      power=0;
+      next=10;
+
+    }else if(mm<38){
+
+      power=add*percent1(mm+.125)/100;
+
+      const currentPower=
+        add*percent1(mm)/100;
+
+      const nextPower=
+        Math.floor(currentPower/.25+1e-9)*.25+.25;
+
+      if(nextPower<=add){
+
+        const boundary=
+          mmAtPercent1(nextPower/add*100);
+
+        if(boundary>mm&&boundary<38)
+          next=boundary;
+      }
+
+    }else{
+
+      power=add;
+      next=50;
+    }
+
+    const slice=document.createElement("div");
+
+    slice.className="heat";
+    slice.style.top=y(mm)+"%";
+    slice.style.height=y(next-mm)+"%";
+    slice.style.background=heatColor(power,reference);
+
+    plot.appendChild(slice);
+
+    mm=next;
+  }
+}
+
+/* DESIGN 2 HEAT */
+
+function drawHeat2(plot,add,corridor){
+
+  const reference=
+    heatMode==="relative"
+      ?add
+      :Math.max(.25,parseFloat(selectedAddInput.value)||.25);
+
+  const end=21+corridor;
+
+  let mm=0;
+
+  while(mm<50){
+
+    let power=0;
+    let next=mm+.25;
+
+    if(mm<21){
+
+      power=0;
+      next=21;
+
+    }else if(mm<end){
+
+      power=add*percent2(mm+.125,corridor)/100;
+
+      const currentPower=
+        add*percent2(mm,corridor)/100;
+
+      const nextPower=
+        Math.floor(currentPower/.25+1e-9)*.25+.25;
+
+      if(nextPower<=add){
+
+        const boundary=
+          mmAtPercent2(nextPower/add*100,corridor);
+
+        if(boundary>mm&&boundary<end)
+          next=boundary;
+      }
+
+    }else{
+
+      power=add;
+      next=50;
+    }
+
+    const slice=document.createElement("div");
+
+    slice.className="heat";
+    slice.style.top=y(mm)+"%";
+    slice.style.height=y(next-mm)+"%";
+    slice.style.background=heatColor(power,reference);
+
+    plot.appendChild(slice);
+
+    mm=next;
+  }
+}
+
+function addLine(plot,mm,label){
+
+  const line=document.createElement("div");
+
+  line.className="line";
+  line.style.top=y(mm)+"%";
+
+  plot.appendChild(line);
+
+  if(label){
+
+    const text=document.createElement("div");
+
+    text.className="label";
+    text.style.top=y(mm)+"%";
+    text.textContent=label;
+
+    plot.appendChild(text);
+  }
+}
+
+function addZoneLabel(plot,mm,text){
+
+  const label=document.createElement("div");
+
+  label.className="zoneLabel";
+  label.style.top=y(mm)+"%";
+  label.textContent=text;
+
+  plot.appendChild(label);
+}
+
+/* DESIGN 1 MARKERS */
+
+function addMarkers1(plot){
+
+  const c=document.createElement("div");
+
+  c.className="cMarker";
+  c.style.top=y(10)+"%";
+
+  plot.appendChild(c);
+
+  const cross=document.createElement("div");
+
+  cross.className="crossMarker";
+  cross.style.top=y(20)+"%";
+
+  plot.appendChild(cross);
+
+  const circle=document.createElement("div");
+
+  circle.className="completeCircle";
+  circle.style.top=y(41)+"%";
+
+  plot.appendChild(circle);
+}
+
+/* DESIGN 2 MARKERS */
+
+function addMarkers2(plot,corridor){
+
+  /* Far circle: 7 mm above the 20 mm cross */
+  const farCircle=document.createElement("div");
+
+  farCircle.className="cMarker";
+  farCircle.style.top=y(18)+"%";
+
+  plot.appendChild(farCircle);
+
+  /* Cross remains at 20 mm */
+  const cross=document.createElement("div");
+
+  cross.className="crossMarker";
+  cross.style.top=y(20)+"%";
+
+  plot.appendChild(cross);
+
+  /* Near circle starts at the beginning of the Near zone */
+  const nearStart=24+corridor;
+
+  const nearCircle=document.createElement("div");
+
+  nearCircle.className="completeCircle";
+  nearCircle.style.top=y(nearStart)+"%";
+
+  plot.appendChild(nearCircle);
+}
+
+function drawDesign1(far,add){
+
+  const plot=plots[0];
+
+  plot.innerHTML="";
+
+  drawHeat1(plot,add);
+  addMarkers1(plot);
+
+  addLine(
+    plot,
+    10,
+    mode==="add"?"0.00 D":formatPower(far)
+  );
+
+  for(let power=.25;power<add;power+=.25){
+
+    const mm=
+      mmAtPercent1(power/add*100);
+
+    addLine(
+      plot,
+      mm,
+      mode==="add"
+        ?formatPower(power)
+        :formatPower(far+power)
+    );
+  }
+
+  addLine(
+    plot,
+    38,
+    mode==="add"
+      ?formatPower(add)
+      :formatPower(far+add)
+  );
+
+  addZoneLabel(plot,7,"FAR");
+  addZoneLabel(plot,45,"NEAR");
+}
+
+function drawDesign2(far,add,corridor){
+
+  const plot=plots[1];
+
+  plot.innerHTML="";
+
+  const end=21+corridor;
+
+  drawHeat2(plot,add,corridor);
+  addMarkers2(plot,corridor);
+
+  addLine(
+    plot,
+    21,
+    mode==="add"?"0.00 D":formatPower(far)
+  );
+
+  for(let power=.25;power<add;power+=.25){
+
+    const mm=
+      mmAtPercent2(power/add*100,corridor);
+
+    addLine(
+      plot,
+      mm,
+      mode==="add"
+        ?formatPower(power)
+        :formatPower(far+power)
+    );
+  }
+
+  addLine(
+    plot,
+    end,
+    mode==="add"
+      ?formatPower(add)
+      :formatPower(far+add)
+  );
+
+  addZoneLabel(plot,15,"FAR");
+  addZoneLabel(plot,(end+7),"NEAR");
+}
+
+function drawRuler(ruler){
+
+  ruler.innerHTML="";
+
+  for(let mm=0;mm<=50;mm++){
+
+    const tick=document.createElement("div");
+
+    tick.className="tick";
+    tick.style.top=y(mm)+"%";
+
+    if(mm%5===0)
+      tick.style.width="15px";
+
+    ruler.appendChild(tick);
+
+    if(mm%5===0){
+
+      const label=document.createElement("div");
+
+      label.className="mm";
+      label.style.top=y(mm)+"%";
+      label.textContent=mm;
+
+      ruler.appendChild(label);
+    }
+  }
+}
+
+function draw(){
+
+  const far=parseFloat(farInput.value)||0;
+
+  const add=Math.max(
+    .25,
+    parseFloat(addInput.value)||.25
+  );
+
+  const corridor=parseInt(corridorInput.value);
+
+  drawDesign1(far,add);
+  drawDesign2(far,add,corridor);
+}
+
+addMode.onclick=()=>{
+
+  mode="add";
+
+  addMode.classList.add("active");
+  finalMode.classList.remove("active");
+
+  draw();
+};
+
+finalMode.onclick=()=>{
+
+  mode="final";
+
+  finalMode.classList.add("active");
+  addMode.classList.remove("active");
+
+  draw();
+};
+
+relativeMode.onclick=()=>{
+
+  heatMode="relative";
+
+  relativeMode.classList.add("active");
+  selectedMode.classList.remove("active");
+
+  draw();
+};
+
+selectedMode.onclick=()=>{
+
+  heatMode="selected";
+
+  selectedMode.classList.add("active");
+  relativeMode.classList.remove("active");
+
+  draw();
+};
+
+farInput.addEventListener("input",draw);
+addInput.addEventListener("input",draw);
+selectedAddInput.addEventListener("input",draw);
+corridorInput.addEventListener("change",draw);
+
+drawRuler(rulers[0]);
+drawRuler(rulers[1]);
+draw();
+
+</script>
+
+</body>
+</html>
