@@ -201,7 +201,11 @@ select{
   left:0;
   width:100%;
   height:1px;
-  background:rgba(60,60,60,.7)
+  background:repeating-linear-gradient(
+    to right,
+    rgba(60,60,60,.35) 0 2px,
+    transparent 2px 7px
+  )
 }
 
 .label{
@@ -231,8 +235,8 @@ select{
 .cMarker{
   position:absolute;
   left:50%;
-  width:50px;
-  height:50px;
+  width:64px;
+  height:64px;
   transform:translate(-50%,-50%);
   border:2px solid #555;
   border-bottom-color:transparent;
@@ -283,6 +287,62 @@ select{
   pointer-events:none
 }
 
+.stepper{
+  display:flex;
+  align-items:center;
+  height:34px;
+  border:1px solid #bbb4a8;
+  border-radius:6px;
+  overflow:hidden;
+  background:#fff
+}
+
+.stepper button{
+  width:30px;
+  height:100%;
+  border:0;
+  background:#eee9df;
+  color:#555;
+  font-size:17px;
+  line-height:1;
+  cursor:pointer;
+  transition:.15s
+}
+
+.stepper button:hover{
+  background:#e3ddd1
+}
+
+.stepper button:active{
+  background:#d7d0c3
+}
+
+.stepper input{
+  width:58px;
+  height:32px;
+  border:0;
+  border-left:1px solid #ddd6c9;
+  border-right:1px solid #ddd6c9;
+  border-radius:0;
+  background:#fff;
+  outline:none;
+}
+
+.stepper input:focus{
+  background:#fffdf7
+}
+
+/* hide browser number arrows */
+.stepper input::-webkit-outer-spin-button,
+.stepper input::-webkit-inner-spin-button{
+  -webkit-appearance:none;
+  margin:0
+}
+
+.stepper input[type=number]{
+  -moz-appearance:textfield
+}
+
 @media(max-width:760px){
 
   body{
@@ -331,6 +391,8 @@ select{
     font-size:9px
   }
 }
+
+
 </style>
 </head>
 
@@ -351,14 +413,20 @@ select{
 
       <div class="control">
         <label for="far">FAR RX</label>
-        <input id="far" type="number" value="-2.00" step="0.25">
-        <span class="unit">D</span>
+<div class="stepper">
+  <button type="button" onclick="stepInput('far',-.25)">−</button>
+  <input id="far" type="number" value="-2.00" step="0.25">
+  <button type="button" onclick="stepInput('far',.25)">+</button>
+</div>        <span class="unit">D</span>
       </div>
 
       <div class="control">
         <label for="add">ADD</label>
-        <input id="add" type="number" value="2.00" min="0.25" step="0.25">
-        <span class="unit">D</span>
+<div class="stepper">
+  <button type="button" onclick="stepInput('add',-.25)">−</button>
+  <input id="add" type="number" value="2.00" min="0.25" step="0.25">
+  <button type="button" onclick="stepInput('add',.25)">+</button>
+</div>        <span class="unit">D</span>
       </div>
 
     </div>
@@ -382,8 +450,11 @@ select{
 
       <div class="control">
         <label for="selectedAdd">HEATMAP MAX ADD</label>
-        <input id="selectedAdd" type="number" value="3.00" min="0.25" step="0.25">
-        <span class="unit">D</span>
+<div class="stepper">
+  <button type="button" onclick="stepInput('selectedAdd',-.25)">−</button>
+  <input id="selectedAdd" type="number" value="3.00" min="0.25" step="0.25">
+  <button type="button" onclick="stepInput('selectedAdd',.25)">+</button>
+</div>        <span class="unit">D</span>
       </div>
 
     </div>
@@ -434,6 +505,20 @@ select{
 </div>
 
 <script>
+
+function stepInput(id,step){
+
+  const input=document.getElementById(id);
+  let value=parseFloat(input.value)||0;
+
+  value=Math.round((value+step)*100)/100;
+
+  if(input.min!=="")
+    value=Math.max(parseFloat(input.min),value);
+
+  input.value=value.toFixed(2);
+  input.dispatchEvent(new Event("input",{bubbles:true}));
+}
 
 const farInput=document.getElementById("far");
 const addInput=document.getElementById("add");
@@ -525,34 +610,31 @@ function formatPower(v){
 
 function heatColor(power,reference){
 
-  if(power<=0)
-    return "#fffdf7";
+  const t=Math.max(
+    0,
+    Math.min(
+      1,
+      reference>0 ? power/reference : 0
+    )
+  );
 
-  const level=Math.floor(power/.25)*.25;
+  if(t<=.25){
+    const a=t/.25;
+    return `rgb(${138+107*a},${187+44*a},${138-16*a})`;
+  }
 
-  let t=reference>0
-    ?level/reference
-    :0;
+  if(t<=.50){
+    const a=(t-.25)/.25;
+    return `rgb(${245+2*a},${231-3*a},${122-18*a})`;
+  }
 
-  t=Math.max(0,Math.min(1,t));
+  if(t<=.75){
+    const a=(t-.50)/.25;
+    return `rgb(${247-4*a},${228-36*a},${104-12*a})`;
+  }
 
-  if(t<=.0625)return "#edf5ef";
-  if(t<=.125)return "#e2eee5";
-  if(t<=.1875)return "#d7e8db";
-  if(t<=.25)return "#cce2d1";
-  if(t<=.3125)return "#c0dcc7";
-  if(t<=.375)return "#b4d6bd";
-  if(t<=.4375)return "#a7cfb3";
-  if(t<=.50)return "#9bc9aa";
-  if(t<=.5625)return "#8fc2a0";
-  if(t<=.625)return "#82bb96";
-  if(t<=.6875)return "#76b48c";
-  if(t<=.75)return "#69ac82";
-  if(t<=.8125)return "#5da578";
-  if(t<=.875)return "#509e6e";
-  if(t<1)return "#449664";
-
-  return "#3a8d5b";
+  const a=(t-.75)/.25;
+  return `rgb(${243-32*a},${192-63*a},${92-18*a})`;
 }
 
 /* DESIGN 1 HEAT */
@@ -605,7 +687,7 @@ function drawHeat1(plot,add){
 
     slice.className="heat";
     slice.style.top=y(mm)+"%";
-    slice.style.height=y(next-mm)+"%";
+slice.style.height=y(next-mm)+.2+"%";
     slice.style.background=heatColor(power,reference);
 
     plot.appendChild(slice);
@@ -666,7 +748,7 @@ function drawHeat2(plot,add,corridor){
 
     slice.className="heat";
     slice.style.top=y(mm)+"%";
-    slice.style.height=y(next-mm)+"%";
+slice.style.height=y(next-mm)+.2+"%";
     slice.style.background=heatColor(power,reference);
 
     plot.appendChild(slice);
@@ -801,7 +883,7 @@ function drawDesign1(far,add){
       :formatPower(far+add)
   );
 
-  addZoneLabel(plot,7,"FAR");
+  addZoneLabel(plot,6,"FAR");
   addZoneLabel(plot,45,"NEAR");
 }
 
@@ -844,7 +926,7 @@ function drawDesign2(far,add,corridor){
       :formatPower(far+add)
   );
 
-  addZoneLabel(plot,15,"FAR");
+  addZoneLabel(plot,14,"FAR");
   addZoneLabel(plot,(end+7),"NEAR");
 }
 
