@@ -114,6 +114,85 @@ select{
   box-shadow:0 1px 2px rgba(0,0,0,.08);
 }
 
+
+/* EYE CONTROLS */
+
+.eyeControls{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid #e3ddd2;
+}
+
+.eyeControl{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.eyeControl label{
+  font-size:11px;
+  color:#666;
+}
+
+.eyePointToggle{
+  height:34px;
+  padding:0 12px;
+  border:1px solid #bbb4a8;
+  border-radius:6px;
+  background:#eee9df;
+  color:#555;
+  font-size:10px;
+  cursor:pointer;
+}
+
+.eyePointToggle:hover{
+  background:#e3ddd1;
+}
+
+.eyePointToggle:active{
+  background:#d7d0c3;
+}
+
+.eyeButtons{
+  display:flex;
+  height:34px;
+  border:1px solid #bbb4a8;
+  border-radius:6px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.eyeButtons button{
+  width:34px;
+  height:100%;
+  border:0;
+  background:#eee9df;
+  color:#555;
+  font-size:17px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.eyeButtons button:hover{
+  background:#e3ddd1;
+}
+
+.eyeButtons button:active{
+  background:#d7d0c3;
+}
+
+.eyeValue{
+  min-width:48px;
+  text-align:center;
+  font-size:12px;
+  color:#555;
+}
+
+
 /* LENS HEADERS */
 
 .lensTitles{
@@ -143,6 +222,7 @@ select{
   font-size:11px;
   padding:3px 6px;
 }
+
 
 /* GRAPHS */
 
@@ -230,13 +310,14 @@ select{
   pointer-events:none
 }
 
-/* MARKERS */
+
+/* EXISTING MARKERS */
 
 .cMarker{
   position:absolute;
   left:50%;
-  width:64px;
-  height:64px;
+  width:100px;
+  height:100px;
   transform:translate(-50%,-50%);
   border:2px solid #555;
   border-bottom-color:transparent;
@@ -247,8 +328,8 @@ select{
 .crossMarker{
   position:absolute;
   left:50%;
-  width:18px;
-  height:18px;
+  width:15px;
+  height:15px;
   transform:translate(-50%,-50%);
   pointer-events:none
 }
@@ -279,13 +360,30 @@ select{
 .completeCircle{
   position:absolute;
   left:50%;
-  width:64px;
-  height:64px;
+  width:100px;
+  height:100px;
   transform:translate(-50%,-50%);
   border:2px solid #555;
   border-radius:50%;
   pointer-events:none
 }
+
+
+/* EYE POINT */
+
+.eyeMarker{
+  position:absolute;
+  left:50%;
+  width:100px;
+  height:100px;
+  transform:translate(-50%,-50%);
+  border:6px solid rgba(185,74,58,0.2);
+  border-radius:50%;
+  pointer-events:none;
+}
+
+
+/* STEPPERS */
 
 .stepper{
   display:flex;
@@ -332,7 +430,6 @@ select{
   background:#fffdf7
 }
 
-/* hide browser number arrows */
 .stepper input::-webkit-outer-spin-button,
 .stepper input::-webkit-inner-spin-button{
   -webkit-appearance:none;
@@ -342,6 +439,7 @@ select{
 .stepper input[type=number]{
   -moz-appearance:textfield
 }
+
 
 @media(max-width:760px){
 
@@ -390,19 +488,80 @@ select{
     left:calc(100% + 7px);
     font-size:9px
   }
-}
 
+  .eyeControls{
+    gap:10px;
+  }
+}
 
 </style>
 </head>
 
 <body>
 
-<div class="app">
+
+
+
+<script>
+let pageScale=1;
+
+function changeScale(amount){
+
+  pageScale+=amount;
+
+  pageScale=Math.max(
+    .35,
+    Math.min(1,pageScale)
+  );
+
+  document.querySelector(".app").style.transform=
+    `scale(${pageScale})`;
+
+  document.getElementById("scaleValue").value=
+    Math.round(pageScale*100)+"%";
+
+}
+</script>
+
+
+
+
+
+
 
 <h1>Multifocal Power Distribution</h1>
 
+
 <!-- PANEL 1 -->
+
+<div class="panel">
+<div class="control">
+  <label>SCALE</label>
+<br>
+  <div class="stepper">
+
+    <button
+      type="button"
+      onclick="changeScale(-.05)"
+    >−</button>
+
+    <input
+      id="scaleValue"
+      type="text"
+      value="100%"
+      readonly
+    >
+
+    <button
+      type="button"
+      onclick="changeScale(.05)"
+    >+</button>
+
+  </div>
+</div>
+</div>
+
+
 <div class="panel">
 
   <div class="sectionTitle">PRESCRIPTION & DISPLAY</div>
@@ -413,23 +572,31 @@ select{
 
       <div class="control">
         <label for="far">FAR RX</label>
-<div class="stepper">
-  <button type="button" onclick="stepInput('far',-.25)">−</button>
-  <input id="far" type="number" value="-2.00" step="0.25">
-  <button type="button" onclick="stepInput('far',.25)">+</button>
-</div>        <span class="unit">D</span>
+
+        <div class="stepper">
+          <button type="button" onclick="stepInput('far',-.25)">−</button>
+          <input id="far" type="number" value="-2.00" step="0.25">
+          <button type="button" onclick="stepInput('far',.25)">+</button>
+        </div>
+
+        <span class="unit">D</span>
       </div>
+
 
       <div class="control">
         <label for="add">ADD</label>
-<div class="stepper">
-  <button type="button" onclick="stepInput('add',-.25)">−</button>
-  <input id="add" type="number" value="2.00" min="0.25" step="0.25">
-  <button type="button" onclick="stepInput('add',.25)">+</button>
-</div>        <span class="unit">D</span>
+
+        <div class="stepper">
+          <button type="button" onclick="stepInput('add',-.25)">−</button>
+          <input id="add" type="number" value="2.00" min="0.25" step="0.25">
+          <button type="button" onclick="stepInput('add',.25)">+</button>
+        </div>
+
+        <span class="unit">D</span>
       </div>
 
     </div>
+
 
     <div class="toggle">
       <button id="addMode" class="active">ADD</button>
@@ -437,9 +604,57 @@ select{
     </div>
 
   </div>
+
+
+  <!-- EYE POINT CONTROL -->
+
+  <div class="eyeControls">
+
+    <div class="eyeControl">
+
+
+
+      <label>EYE POINT</label>
+
+      <div class="eyeButtons">
+
+        <button
+          type="button"
+          onclick="moveEyePoint(-1)"
+          title="Move Eye Point up 1 mm"
+        >↑</button>
+
+        <button
+          type="button"
+          onclick="moveEyePoint(1)"
+          title="Move Eye Point down 1 mm"
+        >↓</button>
+
+      </div>
+
+      <span id="eyePointValue" class="eyeValue">16 MM</span>
+
+      <button
+        type="button"
+        onclick="toggleEyePoint()"
+        id="eyePointToggle"
+        class="eyePointToggle"
+      >
+        EYE POINT: ON
+      </button>
+
+
+
+
+    </div>
+
+  </div>
+
 </div>
 
+
 <!-- PANEL 2 -->
+
 <div class="panel">
 
   <div class="sectionTitle">HEAT MAP & LENS DESIGN</div>
@@ -450,24 +665,32 @@ select{
 
       <div class="control">
         <label for="selectedAdd">HEATMAP MAX ADD</label>
-<div class="stepper">
-  <button type="button" onclick="stepInput('selectedAdd',-.25)">−</button>
-  <input id="selectedAdd" type="number" value="3.00" min="0.25" step="0.25">
-  <button type="button" onclick="stepInput('selectedAdd',.25)">+</button>
-</div>        <span class="unit">D</span>
+
+        <div class="stepper">
+          <button type="button" onclick="stepInput('selectedAdd',-.25)">−</button>
+          <input id="selectedAdd" type="number" value="3.00" min="0.25" step="0.25">
+          <button type="button" onclick="stepInput('selectedAdd',.25)">+</button>
+        </div>
+
+        <span class="unit">D</span>
       </div>
 
     </div>
 
+
     <div class="toggle">
-      <button id="relativeMode" >RELATIVE</button>
+      <button id="relativeMode">RELATIVE</button>
       <button id="selectedMode" class="active">SELECTED</button>
     </div>
 
   </div>
+
 </div>
 
+
+
 <!-- LENS TITLES -->
+
 <div class="lensTitles">
 
   <div class="lensTitle">
@@ -475,40 +698,62 @@ select{
   </div>
 
   <div class="lensTitle design2Title">
+
     <span>DESIGN 2</span>
 
     <select id="corridor" class="corridorSelect">
+
       <option value="9">9 MM</option>
       <option value="11" selected>11 MM</option>
       <option value="13">13 MM</option>
       <option value="15">15 MM</option>
+
     </select>
+
   </div>
 
 </div>
 
+<div class="app">
+
+
 <!-- TWO LENSES -->
+
 <div class="graphs">
 
   <div class="graph">
+
     <div id="ruler1" class="ruler"></div>
+
     <div id="plot1" class="plot"></div>
+
   </div>
+
 
   <div class="graph">
+
     <div id="ruler2" class="ruler"></div>
+
     <div id="plot2" class="plot"></div>
+
   </div>
 
 </div>
 
 </div>
 
+
 <script>
+
+
+/* =========================================================
+   BASIC STEPPER
+========================================================= */
 
 function stepInput(id,step){
 
   const input=document.getElementById(id);
+
   let value=parseFloat(input.value)||0;
 
   value=Math.round((value+step)*100)/100;
@@ -517,40 +762,149 @@ function stepInput(id,step){
     value=Math.max(parseFloat(input.min),value);
 
   input.value=value.toFixed(2);
-  input.dispatchEvent(new Event("input",{bubbles:true}));
+
+  input.dispatchEvent(
+    new Event("input",{bubbles:true})
+  );
 }
 
-const farInput=document.getElementById("far");
-const addInput=document.getElementById("add");
-const selectedAddInput=document.getElementById("selectedAdd");
-const corridorInput=document.getElementById("corridor");
 
-const addMode=document.getElementById("addMode");
-const finalMode=document.getElementById("finalMode");
+/* =========================================================
+   EYE POINT
+========================================================= */
 
-const relativeMode=document.getElementById("relativeMode");
-const selectedMode=document.getElementById("selectedMode");
+/*
+   Eye Point is measured in mm from the top
+   of the 50 mm lens.
+
+   Starting position:
+   Eye Point = 16 mm
+*/
+
+let eyePoint=16;
+
+let eyePointVisible=true;
+
+
+/*
+   Eye Point:
+   -1 = up 1 mm
+   +1 = down 1 mm
+*/
+
+
+function toggleEyePoint(){
+
+  eyePointVisible=!eyePointVisible;
+
+  document.getElementById("eyePointToggle")
+    .textContent=
+      "EYE POINT: "+
+      (eyePointVisible?"ON":"OFF");
+
+  draw();
+
+}
+
+
+function moveEyePoint(amount){
+
+  eyePoint+=amount;
+
+  /*
+     Keep the marker inside the lens.
+  */
+
+  eyePoint=Math.max(
+    0,
+    Math.min(50,eyePoint)
+  );
+
+  updateEyeControls();
+
+  draw();
+
+}
+
+
+function updateEyeControls(){
+
+  document.getElementById("eyePointValue")
+    .textContent=
+      eyePoint.toFixed(0)+" MM";
+
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+const farInput=
+  document.getElementById("far");
+
+const addInput=
+  document.getElementById("add");
+
+const selectedAddInput=
+  document.getElementById("selectedAdd");
+
+const corridorInput=
+  document.getElementById("corridor");
+
+
+const addMode=
+  document.getElementById("addMode");
+
+const finalMode=
+  document.getElementById("finalMode");
+
+
+const relativeMode=
+  document.getElementById("relativeMode");
+
+const selectedMode=
+  document.getElementById("selectedMode");
+
 
 const plots=[
+
   document.getElementById("plot1"),
+
   document.getElementById("plot2")
+
 ];
 
+
 const rulers=[
+
   document.getElementById("ruler1"),
+
   document.getElementById("ruler2")
+
 ];
+
 
 const HEIGHT=50;
 
+
 let mode="add";
+
 let heatMode="selected";
 
+
 function y(mm){
+
   return mm/HEIGHT*100
+
 }
 
-/* DESIGN 1
+
+/* =========================================================
+   DESIGN 1
+========================================================= */
+
+/*
    10 mm = 0%
    20 mm = 12%
    38 mm = 100%
@@ -558,7 +912,8 @@ function y(mm){
 
 function percent1(mm){
 
-  if(mm<=10)return 0;
+  if(mm<=10)
+    return 0;
 
   if(mm<=20)
     return (mm-10)/10*12;
@@ -569,46 +924,66 @@ function percent1(mm){
   return 100;
 }
 
+
 function mmAtPercent1(p){
 
   if(p<=12)
     return 10+(p/12)*10;
 
   return 20+((p-12)/88)*18;
+
 }
 
-/* DESIGN 2
-   21 mm = 0%
-   corridor end = 100%
-*/
+
+/* =========================================================
+   DESIGN 2
+========================================================= */
 
 function percent2(mm,corridor){
 
-  const end=21+corridor;
+  const start=20;
 
-  if(mm<=21)return 0;
+  const end=start+corridor;
+
+  if(mm<=start)
+    return 0;
 
   if(mm<=end)
-    return (mm-21)/corridor*100;
+    return (mm-start)/corridor*100;
 
   return 100;
 }
 
+
 function mmAtPercent2(p,corridor){
 
-  return 21+(p/100)*corridor;
+  return 20+(p/100)*corridor;
+
 }
+
+
+/* =========================================================
+   FORMAT POWER
+========================================================= */
 
 function formatPower(v){
 
   const n=Math.round(v*100)/100;
 
   return (n>0?"+":"")+n.toFixed(2)+" D";
+
 }
 
-/* SAME HEAT COLOURS */
+
+/* =========================================================
+   HEAT COLOUR
+========================================================= */
 
 function heatColor(power,reference){
+
+  if(power<=0)
+    return "#fffdf7";
+
 
   const t=Math.max(
     0,
@@ -618,253 +993,685 @@ function heatColor(power,reference){
     )
   );
 
-  if(t<=.25){
-    const a=t/.25;
-    return `rgb(${138+107*a},${187+44*a},${138-16*a})`;
-  }
 
-  if(t<=.50){
-    const a=(t-.25)/.25;
-    return `rgb(${245+2*a},${231-3*a},${122-18*a})`;
-  }
+  const steps=Math.max(
+    1,
+    Math.min(
+      12,
+      Math.round(t*12)
+    )
+  );
 
-  if(t<=.75){
-    const a=(t-.50)/.25;
-    return `rgb(${247-4*a},${228-36*a},${104-12*a})`;
-  }
 
-  const a=(t-.75)/.25;
-  return `rgb(${243-32*a},${192-63*a},${92-18*a})`;
+  const colors=[
+
+    [225,215,235],
+    [205,190,225],
+    [185,175,220],
+    [185,215,205],
+    [165,220,185],
+    [145,215,165],
+    [190,225,155],
+    [225,225,155],
+    [240,220,145],
+    [245,205,145],
+    [245,190,155],
+    [245,175,165]
+
+  ];
+
+
+  const c=colors[steps-1];
+
+
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+
 }
 
-/* DESIGN 1 HEAT */
+
+/* =========================================================
+   DARKEN
+========================================================= */
+
+function darkenColor(color,amount=.25){
+
+  const match=color.match(/\d+/g);
+
+  if(!match)
+    return color;
+
+
+  const r=parseInt(match[0]);
+
+  const g=parseInt(match[1]);
+
+  const b=parseInt(match[2]);
+
+
+  return `rgb(
+    ${Math.round(r*(1-amount))},
+    ${Math.round(g*(1-amount))},
+    ${Math.round(b*(1-amount))}
+  )`;
+
+}
+
+
+/* =========================================================
+   DESIGN 1 HEAT
+========================================================= */
 
 function drawHeat1(plot,add){
 
   const reference=
     heatMode==="relative"
       ?add
-      :Math.max(.25,parseFloat(selectedAddInput.value)||.25);
+      :Math.max(
+          .25,
+          parseFloat(selectedAddInput.value)||.25
+        );
+
 
   let mm=0;
 
+
   while(mm<50){
 
-    let power=0;
+    let regionPower=0;
+
+    let regionColor=null;
+
     let next=mm+.25;
+
+
+    /* FAR */
 
     if(mm<10){
 
-      power=0;
+      regionPower=0;
+
       next=10;
+
+
+    /* PROGRESSION */
 
     }else if(mm<38){
 
-      power=add*percent1(mm+.125)/100;
-
       const currentPower=
-        add*percent1(mm)/100;
+        add*
+        percent1(mm)/
+        100;
+
 
       const nextPower=
-        Math.floor(currentPower/.25+1e-9)*.25+.25;
+        Math.floor(
+          currentPower/.25+1e-9
+        )*.25+.25;
+
 
       if(nextPower<=add){
 
         const boundary=
-          mmAtPercent1(nextPower/add*100);
+          mmAtPercent1(
+            nextPower/add*100
+          );
 
-        if(boundary>mm&&boundary<38)
+
+        if(boundary>mm && boundary<38)
           next=boundary;
+
+
+        regionPower=nextPower;
+
+
+      }else{
+
+        regionPower=add;
+
+        next=38;
+
       }
+
+
+    /* ADD / NEAR */
 
     }else{
 
-      power=add;
+      const topPower=
+        Math.max(
+          .25,
+          Math.floor(add/.25)*.25
+        );
+
+
+      const topColor=
+        heatColor(
+          topPower,
+          reference
+        );
+
+
+      regionColor=
+        darkenColor(
+          topColor,
+          .1
+        );
+
+
       next=50;
     }
 
-    const slice=document.createElement("div");
+
+    const slice=
+      document.createElement("div");
+
 
     slice.className="heat";
-    slice.style.top=y(mm)+"%";
-slice.style.height=y(next-mm)+.2+"%";
-    slice.style.background=heatColor(power,reference);
+
+
+    slice.style.top=
+      y(mm)+"%";
+
+
+    slice.style.height=
+      y(next-mm)+.2+"%";
+
+
+    if(regionColor!==null){
+
+      slice.style.background=
+        regionColor;
+
+    }else{
+
+      slice.style.background=
+        heatColor(
+          regionPower,
+          reference
+        );
+
+    }
+
 
     plot.appendChild(slice);
 
+
     mm=next;
+
   }
+
 }
 
-/* DESIGN 2 HEAT */
+
+/* =========================================================
+   DESIGN 2 HEAT
+========================================================= */
 
 function drawHeat2(plot,add,corridor){
 
   const reference=
     heatMode==="relative"
       ?add
-      :Math.max(.25,parseFloat(selectedAddInput.value)||.25);
+      :Math.max(
+          .25,
+          parseFloat(selectedAddInput.value)||.25
+        );
 
-  const end=21+corridor;
+
+  const start=20;
+
+  const end=start+corridor;
+
 
   let mm=0;
 
+
   while(mm<50){
 
-    let power=0;
+    let regionPower=0;
+
+    let regionColor=null;
+
     let next=mm+.25;
 
-    if(mm<21){
 
-      power=0;
-      next=21;
+    /* FAR */
+
+    if(mm<start){
+
+      regionPower=0;
+
+      next=start;
+
+
+    /* PROGRESSION */
 
     }else if(mm<end){
 
-      power=add*percent2(mm+.125,corridor)/100;
-
       const currentPower=
-        add*percent2(mm,corridor)/100;
+        add*
+        percent2(mm,corridor)/
+        100;
+
 
       const nextPower=
-        Math.floor(currentPower/.25+1e-9)*.25+.25;
+        Math.floor(
+          currentPower/.25+1e-9
+        )*.25+.25;
+
 
       if(nextPower<=add){
 
         const boundary=
-          mmAtPercent2(nextPower/add*100,corridor);
+          mmAtPercent2(
+            nextPower/add*100,
+            corridor
+          );
 
-        if(boundary>mm&&boundary<end)
+
+        if(boundary>mm && boundary<end)
           next=boundary;
+
+
+        regionPower=nextPower;
+
+
+      }else{
+
+        regionPower=add;
+
+        next=end;
+
       }
+
+
+    /* ADD / NEAR */
 
     }else{
 
-      power=add;
+      const topPower=
+        Math.max(
+          .25,
+          Math.floor(add/.25)*.25
+        );
+
+
+      const topColor=
+        heatColor(
+          topPower,
+          reference
+        );
+
+
+      regionColor=
+        darkenColor(
+          topColor,
+          .1
+        );
+
+
       next=50;
     }
 
-    const slice=document.createElement("div");
+
+    const slice=
+      document.createElement("div");
+
 
     slice.className="heat";
-    slice.style.top=y(mm)+"%";
-slice.style.height=y(next-mm)+.2+"%";
-    slice.style.background=heatColor(power,reference);
+
+
+    slice.style.top=
+      y(mm)+"%";
+
+
+    slice.style.height=
+      y(next-mm)+.2+"%";
+
+
+    if(regionColor!==null){
+
+      slice.style.background=
+        regionColor;
+
+    }else{
+
+      slice.style.background=
+        heatColor(
+          regionPower,
+          reference
+        );
+
+    }
+
 
     plot.appendChild(slice);
 
+
     mm=next;
+
   }
+
 }
+
+
+/* =========================================================
+   LINES
+========================================================= */
 
 function addLine(plot,mm,label){
 
-  const line=document.createElement("div");
+  const line=
+    document.createElement("div");
+
 
   line.className="line";
-  line.style.top=y(mm)+"%";
+
+  line.style.top=
+    y(mm)+"%";
+
 
   plot.appendChild(line);
 
+
   if(label){
 
-    const text=document.createElement("div");
+    const text=
+      document.createElement("div");
+
 
     text.className="label";
-    text.style.top=y(mm)+"%";
-    text.textContent=label;
+
+    text.style.top=
+      y(mm)+"%";
+
+
+    text.textContent=
+      label;
+
 
     plot.appendChild(text);
+
   }
+
 }
+
+
+/* =========================================================
+   ZONE LABEL
+========================================================= */
 
 function addZoneLabel(plot,mm,text){
 
-  const label=document.createElement("div");
+  const label=
+    document.createElement("div");
+
 
   label.className="zoneLabel";
-  label.style.top=y(mm)+"%";
-  label.textContent=text;
+
+  label.style.top=
+    y(mm)+"%";
+
+
+  label.textContent=
+    text;
+
 
   plot.appendChild(label);
+
 }
 
-/* DESIGN 1 MARKERS */
+
+/* =========================================================
+   EYE MARKERS
+========================================================= */
+
+function addEyeMarker(plot,mm){
+
+  if(!eyePointVisible)
+    return;
+
+
+  if(mm<0 || mm>50)
+    return;
+
+
+  const eye=
+    document.createElement("div");
+
+
+  eye.className="eyeMarker";
+
+
+  eye.style.top=
+    y(mm)+"%";
+
+
+  plot.appendChild(eye);
+
+}
+
+
+function addEyeMarkers(plot){
+
+  if(!eyePointVisible)
+    return;
+
+
+  /*
+     Eye Point
+  */
+
+  addEyeMarker(
+    plot,
+    eyePoint
+  );
+
+
+  /*
+     Red reference lines:
+     16, 18 and 20 mm BELOW Eye Point
+  */
+
+  [16,18,20].forEach(offset=>{
+
+    const mm=
+      eyePoint+offset;
+
+
+    if(mm>50)
+      return;
+
+
+    const line=
+      document.createElement("div");
+
+
+    line.style.position="absolute";
+    line.style.left="50%";
+    line.style.width="50px";
+    line.style.height="3px";
+    line.style.top=y(mm)+"%";
+    line.style.transform="translate(-50%,-50%)";
+    line.style.background="rgba(185,74,58,0.5)";
+    line.style.pointerEvents="none";
+    line.style.zIndex="20";
+
+
+    plot.appendChild(line);
+
+  });
+
+}
+
+
+/* =========================================================
+   DESIGN 1 MARKERS
+========================================================= */
 
 function addMarkers1(plot){
 
-  const c=document.createElement("div");
+  const c=
+    document.createElement("div");
+
 
   c.className="cMarker";
-  c.style.top=y(10)+"%";
+
+  c.style.top=
+    y(10)+"%";
+
 
   plot.appendChild(c);
 
-  const cross=document.createElement("div");
+
+  const cross=
+    document.createElement("div");
+
 
   cross.className="crossMarker";
-  cross.style.top=y(20)+"%";
+
+  cross.style.top=
+    y(20)+"%";
+
 
   plot.appendChild(cross);
 
-  const circle=document.createElement("div");
+
+  const circle=
+    document.createElement("div");
+
 
   circle.className="completeCircle";
-  circle.style.top=y(41)+"%";
+
+  circle.style.top=
+    y(42.5)+"%";
+
 
   plot.appendChild(circle);
+
+
+  /*
+     Eye Point and red reference lines
+  */
+
+  addEyeMarkers(plot);
+
 }
 
-/* DESIGN 2 MARKERS */
+
+/* =========================================================
+   DESIGN 2 MARKERS
+========================================================= */
 
 function addMarkers2(plot,corridor){
 
-  /* Far circle: 7 mm above the 20 mm cross */
-  const farCircle=document.createElement("div");
+  /*
+     Far circle
+  */
+
+  const farCircle=
+    document.createElement("div");
+
 
   farCircle.className="cMarker";
-  farCircle.style.top=y(18)+"%";
+
+  farCircle.style.top=
+    y(16)+"%";
+
 
   plot.appendChild(farCircle);
 
-  /* Cross remains at 20 mm */
-  const cross=document.createElement("div");
+
+  /*
+     Cross at 20 mm
+  */
+
+  const cross=
+    document.createElement("div");
+
 
   cross.className="crossMarker";
-  cross.style.top=y(20)+"%";
+
+  cross.style.top=
+    y(20)+"%";
+
 
   plot.appendChild(cross);
 
-  /* Near circle starts at the beginning of the Near zone */
-  const nearStart=24+corridor;
 
-  const nearCircle=document.createElement("div");
+  /*
+     Near circle
+  */
+
+  const nearStart=
+    20+corridor+4.5;
+
+
+  const nearCircle=
+    document.createElement("div");
+
 
   nearCircle.className="completeCircle";
-  nearCircle.style.top=y(nearStart)+"%";
+
+  nearCircle.style.top=
+    y(nearStart)+"%";
+
 
   plot.appendChild(nearCircle);
+
+
+  /*
+     Eye Point and red reference lines
+  */
+
+  addEyeMarkers(plot);
+
 }
+
+
+/* =========================================================
+   DESIGN 1
+========================================================= */
 
 function drawDesign1(far,add){
 
   const plot=plots[0];
 
+
   plot.innerHTML="";
 
-  drawHeat1(plot,add);
-  addMarkers1(plot);
+
+  drawHeat1(
+    plot,
+    add
+  );
+
+
+  addMarkers1(
+    plot
+  );
+
 
   addLine(
     plot,
     10,
-    mode==="add"?"0.00 D":formatPower(far)
+    mode==="add"
+      ?"0.00 D"
+      :formatPower(far)
   );
 
-  for(let power=.25;power<add;power+=.25){
+
+  for(
+    let power=.25;
+    power<add;
+    power+=.25
+  ){
 
     const mm=
-      mmAtPercent1(power/add*100);
+      mmAtPercent1(
+        power/add*100
+      );
+
 
     addLine(
       plot,
@@ -873,7 +1680,9 @@ function drawDesign1(far,add){
         ?formatPower(power)
         :formatPower(far+power)
     );
+
   }
+
 
   addLine(
     plot,
@@ -883,31 +1692,75 @@ function drawDesign1(far,add){
       :formatPower(far+add)
   );
 
-  addZoneLabel(plot,6,"FAR");
-  addZoneLabel(plot,45,"NEAR");
+
+  addZoneLabel(
+    plot,
+    10,
+    "FAR"
+  );
+
+
+  addZoneLabel(
+    plot,
+    42.5,
+    "NEAR"
+  );
+
 }
+
+
+/* =========================================================
+   DESIGN 2
+========================================================= */
 
 function drawDesign2(far,add,corridor){
 
   const plot=plots[1];
 
+
   plot.innerHTML="";
 
-  const end=21+corridor;
 
-  drawHeat2(plot,add,corridor);
-  addMarkers2(plot,corridor);
+  const start=20;
+
+  const end=
+    start+corridor;
+
+
+  drawHeat2(
+    plot,
+    add,
+    corridor
+  );
+
+
+  addMarkers2(
+    plot,
+    corridor
+  );
+
 
   addLine(
     plot,
-    21,
-    mode==="add"?"0.00 D":formatPower(far)
+    start,
+    mode==="add"
+      ?"0.00 D"
+      :formatPower(far)
   );
 
-  for(let power=.25;power<add;power+=.25){
+
+  for(
+    let power=.25;
+    power<add;
+    power+=.25
+  ){
 
     const mm=
-      mmAtPercent2(power/add*100,corridor);
+      mmAtPercent2(
+        power/add*100,
+        corridor
+      );
+
 
     addLine(
       plot,
@@ -916,7 +1769,9 @@ function drawDesign2(far,add,corridor){
         ?formatPower(power)
         :formatPower(far+power)
     );
+
   }
+
 
   addLine(
     plot,
@@ -926,101 +1781,237 @@ function drawDesign2(far,add,corridor){
       :formatPower(far+add)
   );
 
-  addZoneLabel(plot,14,"FAR");
-  addZoneLabel(plot,(end+7),"NEAR");
+
+  addZoneLabel(
+    plot,
+    16,
+    "FAR"
+  );
+
+
+  addZoneLabel(
+    plot,
+    end+4.5,
+    "NEAR"
+  );
+
 }
+
+
+/* =========================================================
+   RULER
+========================================================= */
 
 function drawRuler(ruler){
 
   ruler.innerHTML="";
 
-  for(let mm=0;mm<=50;mm++){
 
-    const tick=document.createElement("div");
+  for(
+    let mm=0;
+    mm<=50;
+    mm++
+  ){
+
+    const tick=
+      document.createElement("div");
+
 
     tick.className="tick";
-    tick.style.top=y(mm)+"%";
+
+
+    tick.style.top=
+      y(mm)+"%";
+
 
     if(mm%5===0)
       tick.style.width="15px";
 
+
     ruler.appendChild(tick);
+
 
     if(mm%5===0){
 
-      const label=document.createElement("div");
+      const label=
+        document.createElement("div");
+
 
       label.className="mm";
-      label.style.top=y(mm)+"%";
-      label.textContent=mm;
+
+
+      label.style.top=
+        y(mm)+"%";
+
+
+      label.textContent=
+        mm;
+
 
       ruler.appendChild(label);
+
     }
+
   }
+
 }
+
+
+/* =========================================================
+   DRAW EVERYTHING
+========================================================= */
 
 function draw(){
 
-  const far=parseFloat(farInput.value)||0;
+  const far=
+    parseFloat(farInput.value)||0;
 
-  const add=Math.max(
-    .25,
-    parseFloat(addInput.value)||.25
+
+  const add=
+    Math.max(
+      .25,
+      parseFloat(addInput.value)||.25
+    );
+
+
+  const corridor=
+    parseInt(corridorInput.value);
+
+
+  drawDesign1(
+    far,
+    add
   );
 
-  const corridor=parseInt(corridorInput.value);
 
-  drawDesign1(far,add);
-  drawDesign2(far,add,corridor);
+  drawDesign2(
+    far,
+    add,
+    corridor
+  );
+
 }
+
+
+/* =========================================================
+   ADD / FINAL
+========================================================= */
 
 addMode.onclick=()=>{
 
   mode="add";
 
+
   addMode.classList.add("active");
+
   finalMode.classList.remove("active");
 
+
   draw();
+
 };
+
 
 finalMode.onclick=()=>{
 
   mode="final";
 
+
   finalMode.classList.add("active");
+
   addMode.classList.remove("active");
 
+
   draw();
+
 };
+
+
+/* =========================================================
+   RELATIVE / SELECTED
+========================================================= */
 
 relativeMode.onclick=()=>{
 
   heatMode="relative";
 
+
   relativeMode.classList.add("active");
+
   selectedMode.classList.remove("active");
 
+
   draw();
+
 };
+
 
 selectedMode.onclick=()=>{
 
   heatMode="selected";
 
+
   selectedMode.classList.add("active");
+
   relativeMode.classList.remove("active");
 
+
   draw();
+
 };
 
-farInput.addEventListener("input",draw);
-addInput.addEventListener("input",draw);
-selectedAddInput.addEventListener("input",draw);
-corridorInput.addEventListener("change",draw);
 
-drawRuler(rulers[0]);
-drawRuler(rulers[1]);
+/* =========================================================
+   INPUT LISTENERS
+========================================================= */
+
+farInput.addEventListener(
+  "input",
+  draw
+);
+
+
+addInput.addEventListener(
+  "input",
+  draw
+);
+
+
+selectedAddInput.addEventListener(
+  "input",
+  draw
+);
+
+
+corridorInput.addEventListener(
+  "change",
+  draw
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+updateEyeControls();
+
+
+document.getElementById("eyePointToggle")
+  .textContent=
+    "EYE POINT: "+
+    (eyePointVisible?"ON":"OFF");
+
+
+drawRuler(
+  rulers[0]
+);
+
+
+drawRuler(
+  rulers[1]
+);
+
+
 draw();
 
 </script>
