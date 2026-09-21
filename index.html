@@ -229,7 +229,7 @@ select{
 .graphs{
   display:flex;
   justify-content:center;
-  gap:70px;
+  gap:120px;
 }
 
 .graph{
@@ -261,7 +261,7 @@ select{
 
 .plot{
   position:relative;
-  width:220px;
+  width:750px;
   height:600px;
   overflow:visible;
   background:#fffdf7;
@@ -299,7 +299,7 @@ select{
 
 .zoneLabel{
   position:absolute;
-  left:50%;
+  left:35%;
   transform:translate(-50%,-50%);
   font-size:10px;
   letter-spacing:1px;
@@ -502,26 +502,7 @@ select{
 
 
 
-<script>
-let pageScale=1;
 
-function changeScale(amount){
-
-  pageScale+=amount;
-
-  pageScale=Math.max(
-    .35,
-    Math.min(1,pageScale)
-  );
-
-  document.querySelector(".app").style.transform=
-    `scale(${pageScale})`;
-
-  document.getElementById("scaleValue").value=
-    Math.round(pageScale*100)+"%";
-
-}
-</script>
 
 
 
@@ -548,7 +529,7 @@ function changeScale(amount){
     <input
       id="scaleValue"
       type="text"
-      value="100%"
+      value="45%"
       readonly
     >
 
@@ -2015,6 +1996,42 @@ drawRuler(
 draw();
 
 </script>
+
+
+
+<script>
+let pageScale=.45;
+
+function applyScale(){
+
+  document.querySelector(".app").style.transform=
+    `scale(${pageScale})`;
+
+  document.getElementById("scaleValue").value=
+    Math.round((pageScale/.45)*100)+"%";
+
+}
+
+function changeScale(amount){
+
+  pageScale+=amount;
+
+  pageScale=Math.max(
+    .2,
+    Math.min(.9,pageScale)
+  );
+
+  applyScale();
+
+}
+
+window.addEventListener("load",applyScale);
+</script>
+
+
+
+
+
 
 </body>
 </html>
