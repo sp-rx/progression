@@ -556,6 +556,76 @@ input[type="range"]::-moz-range-thumb{
 <h1>Multifocal Power Distribution</h1>
 
 
+
+<!-- LENS TITLES -->
+
+<div class="lensTitles">
+
+  <div class="lensTitle">
+    DESIGN 1
+  </div>
+
+  <div class="lensTitle design2Title">
+
+    <span>DESIGN 2</span>
+
+    <select id="corridor" class="corridorSelect">
+
+      <option value="9">9 MM</option>
+      <option value="11" selected>11 MM</option>
+      <option value="13">13 MM</option>
+      <option value="15">15 MM</option>
+
+    </select>
+
+  </div>
+
+</div>
+
+
+
+
+<div class="app">
+
+
+<!-- TWO LENSES -->
+
+<div class="graphs">
+
+  <div class="graph">
+
+    <div id="ruler1" class="ruler"></div>
+
+    <div id="plot1" class="plot"></div>
+
+  </div>
+
+
+  <div class="graph">
+
+    <div id="ruler2" class="ruler"></div>
+
+    <div id="plot2" class="plot"></div>
+
+  </div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- PANEL 1 -->
 
 <div class="panel">
@@ -573,7 +643,6 @@ input[type="range"]::-moz-range-thumb{
       oninput="pageScale=this.value/100;applyScale()"
     >
 
-    <span id="scaleValue">58%</span>
   </div>
 
 </div>
@@ -745,58 +814,24 @@ input[type="range"]::-moz-range-thumb{
 
 </div>
 
-<!-- LENS TITLES -->
-
-<div class="lensTitles">
-
-  <div class="lensTitle">
-    DESIGN 1
-  </div>
-
-  <div class="lensTitle design2Title">
-
-    <span>DESIGN 2</span>
-
-    <select id="corridor" class="corridorSelect">
-
-      <option value="9">9 MM</option>
-      <option value="11" selected>11 MM</option>
-      <option value="13">13 MM</option>
-      <option value="15">15 MM</option>
-
-    </select>
-
-  </div>
-
-</div>
-
-<div class="app">
 
 
-<!-- TWO LENSES -->
-
-<div class="graphs">
-
-  <div class="graph">
-
-    <div id="ruler1" class="ruler"></div>
-
-    <div id="plot1" class="plot"></div>
-
-  </div>
 
 
-  <div class="graph">
 
-    <div id="ruler2" class="ruler"></div>
 
-    <div id="plot2" class="plot"></div>
 
-  </div>
 
-</div>
 
-</div>
+
+
+
+
+
+
+
+
+
 
 
 <script>
@@ -835,6 +870,10 @@ function stepInput(id,step){
 
    Starting position:
    Eye Point = 16 mm
+
+   The eye marker itself stays FIXED.
+
+   The lens design moves relative to it.
 */
 
 let eyePoint=16;
@@ -868,7 +907,7 @@ function moveEyePoint(amount){
   eyePoint+=amount;
 
   /*
-     Keep the marker inside the lens.
+     Keep the eye point inside the lens.
   */
 
   eyePoint=Math.max(
@@ -954,6 +993,31 @@ function y(mm){
 
 function h(mm){
   return mm/HEIGHT*100;
+}
+
+
+/* =========================================================
+   LENS POSITION
+========================================================= */
+
+/*
+   The eye marker is permanently fixed at
+   the original 16 mm position.
+
+   When Eye Point changes, the entire lens
+   design moves in the opposite direction.
+
+   Eye Point 16 mm = original position
+   Eye Point 20 mm = lens moves up 4 mm
+   Eye Point 12 mm = lens moves down 4 mm
+*/
+
+function lensY(mm){
+
+  return y(
+    mm-eyePoint+16
+  );
+
 }
 
 
@@ -1229,11 +1293,11 @@ function drawHeat1(plot,add){
 
 
     slice.style.top=
-      y(mm)+"%";
+      lensY(mm)+"%";
 
 
-slice.style.height=
-  h(next-mm)+.2+"%";
+    slice.style.height=
+      h(next-mm)+.2+"%";
 
 
     if(regionColor!==null){
@@ -1381,11 +1445,11 @@ function drawHeat2(plot,add,corridor){
 
 
     slice.style.top=
-      y(mm)+"%";
+      lensY(mm)+"%";
 
 
-slice.style.height=
-  h(next-mm)+.2+"%";
+    slice.style.height=
+      h(next-mm)+.2+"%";
 
 
     if(regionColor!==null){
@@ -1427,7 +1491,7 @@ function addLine(plot,mm,label){
   line.className="line";
 
   line.style.top=
-    y(mm)+"%";
+    lensY(mm)+"%";
 
 
   plot.appendChild(line);
@@ -1442,7 +1506,7 @@ function addLine(plot,mm,label){
     text.className="label";
 
     text.style.top=
-      y(mm)+"%";
+      lensY(mm)+"%";
 
 
     text.textContent=
@@ -1469,7 +1533,7 @@ function addZoneLabel(plot,mm,text){
   label.className="zoneLabel";
 
   label.style.top=
-    y(mm)+"%";
+    lensY(mm)+"%";
 
 
   label.textContent=
@@ -1502,8 +1566,15 @@ function addEyeMarker(plot,mm){
   eye.className="eyeMarker";
 
 
+  /*
+     Eye marker NEVER moves.
+
+     It is permanently positioned at the
+     original 16 mm location.
+  */
+
   eye.style.top=
-    y(mm)+"%";
+    y(16)+"%";
 
 
   plot.appendChild(eye);
@@ -1529,17 +1600,16 @@ function addEyeMarkers(plot){
 
   /*
      Red reference lines:
-     16, 18 and 20 mm BELOW Eye Point
+     16, 18 and 20 mm BELOW Eye Point.
+
+     These remain fixed relative to the
+     permanent eye marker.
   */
 
   [16,18,20].forEach(offset=>{
 
     const mm=
       eyePoint+offset;
-
-
-    if(mm>50)
-      return;
 
 
     const line=
@@ -1550,7 +1620,16 @@ function addEyeMarkers(plot){
     line.style.left="50%";
     line.style.width="50px";
     line.style.height="3px";
-    line.style.top=y(mm)+"%";
+
+    /*
+       Use lensY so the Eye Point movement
+       cancels out and these lines remain
+       fixed relative to the eye marker.
+    */
+
+    line.style.top=
+      lensY(mm)+"%";
+
     line.style.transform="translate(-50%,-50%)";
     line.style.background="rgba(185,74,58,0.7)";
     line.style.pointerEvents="none";
@@ -1577,7 +1656,7 @@ function addMarkers1(plot){
   c.className="cMarker";
 
   c.style.top=
-    y(10)+"%";
+    lensY(10)+"%";
 
 
   plot.appendChild(c);
@@ -1590,7 +1669,7 @@ function addMarkers1(plot){
   cross.className="crossMarker";
 
   cross.style.top=
-    y(20)+"%";
+    lensY(20)+"%";
 
 
   plot.appendChild(cross);
@@ -1603,7 +1682,7 @@ function addMarkers1(plot){
   circle.className="completeCircle";
 
   circle.style.top=
-    y(42.5)+"%";
+    lensY(42.5)+"%";
 
 
   plot.appendChild(circle);
@@ -1635,7 +1714,7 @@ function addMarkers2(plot,corridor){
   farCircle.className="cMarker";
 
   farCircle.style.top=
-    y(16)+"%";
+    lensY(16)+"%";
 
 
   plot.appendChild(farCircle);
@@ -1652,7 +1731,7 @@ function addMarkers2(plot,corridor){
   cross.className="crossMarker";
 
   cross.style.top=
-    y(20)+"%";
+    lensY(20)+"%";
 
 
   plot.appendChild(cross);
@@ -1673,7 +1752,7 @@ function addMarkers2(plot,corridor){
   nearCircle.className="completeCircle";
 
   nearCircle.style.top=
-    y(nearStart)+"%";
+    lensY(nearStart)+"%";
 
 
   plot.appendChild(nearCircle);
@@ -1879,8 +1958,8 @@ function drawRuler(ruler){
     tick.className="tick";
 
 
-tick.style.top=
-  mm+"%";
+    tick.style.top=
+      mm+"%";
 
 
     if(mm%5===0)
@@ -1899,8 +1978,8 @@ tick.style.top=
       label.className="mm";
 
 
-label.style.top=
-  mm+"%";
+      label.style.top=
+        mm+"%";
 
 
       label.textContent=
@@ -2105,7 +2184,6 @@ function changeScale(amount){
 
 window.addEventListener("load",applyScale);
 </script>
-
 
 
 
