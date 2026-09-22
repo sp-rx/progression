@@ -196,15 +196,11 @@ select{
 /* LENS HEADERS */
 
 .lensTitles{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:350px;
-  margin:0 0 10px;
 }
 
 .lensTitle{
   text-align:center;
-  font-size:20px;
+  font-size:12px;
   letter-spacing:1px;
   color:#555;
 }
@@ -214,13 +210,14 @@ select{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:10px;
+  gap:20px;
 }
 
 .corridorSelect{
   width:102px;
   height:28px;
   font-size:12px;
+  margin-left:10px;
 }
 
 
@@ -568,16 +565,33 @@ input[type="range"]::-moz-range-thumb{
 
 
 <!-- TWO LENSES -->
-<div style="margin-top:-250px" class="lensTitles">
 
-  <div class="lensTitle">
-    DESIGN 1
+<div style="margin-top:-270px; margin-bottom:-250px" class="graphs">
+  <div class="graph">
+    <div id="ruler1" class="ruler"></div>
+    <div id="plot1" class="plot"></div>
   </div>
 
-  <div class="lensTitle design2Title">
 
-    <span>DESIGN 2</span>
+  <div class="graph">
+    <div id="ruler2" class="ruler"></div>
 
+    <div id="plot2" class="plot"></div>
+  </div>
+</div>
+
+
+</div>
+<div style="margin-bottom:20px" class="lensTitles">
+
+  <span style="margin-left:250px" class="lensTitle">
+    OFFICE LENS DESIGN
+</span>
+
+
+  <span style="margin-left:140px" class="lensTitle">
+
+   PROGRESSIVE LENS 
     <select id="corridor" class="corridorSelect">
 
       <option value="9">9 MM</option>
@@ -587,35 +601,9 @@ input[type="range"]::-moz-range-thumb{
 
     </select>
 
-  </div>
+</span>
 
 </div>
-
-
-<div style="margin-top:0; margin-bottom:-230px" class="graphs">
-
-  <div class="graph">
-
-    <div id="ruler1" class="ruler"></div>
-
-    <div id="plot1" class="plot"></div>
-
-
-  </div>
-
-
-  <div class="graph">
-
-    <div id="ruler2" class="ruler"></div>
-
-    <div id="plot2" class="plot"></div>
-
-  </div>
-
-</div>
-
-</div>
-
 
 
 
