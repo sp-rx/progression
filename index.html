@@ -240,7 +240,7 @@ select{
 .ruler{
   position:relative;
   width:50px;
-  height:600px
+  height:1200px
 }
 
 .mm{
@@ -262,7 +262,7 @@ select{
 .plot{
   position:relative;
   width:850px;
-  height:600px;
+  height:1200px;
   overflow:visible;
   background:#fffdf7;
   border:1px solid #aaa296;
@@ -494,16 +494,59 @@ select{
   }
 }
 
+input[type="range"]{
+  width:180px;
+  height:6px;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track{
+  height:4px;
+  background:#d8d1c5;
+  border-radius:4px;
+}
+
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:16px;
+  height:16px;
+  margin-top:-6px;
+  border-radius:50%;
+  background:#527a64;
+  border:2px solid #fffdf7;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+
+input[type="range"]::-moz-range-track{
+  height:4px;
+  background:#d8d1c5;
+  border-radius:4px;
+}
+
+input[type="range"]::-moz-range-thumb{
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:#527a64;
+  border:2px solid #fffdf7;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+
+.sliderValue{
+  min-width:55px;
+  font-size:12px;
+  color:#555;
+  text-align:center;
+}
+
 </style>
 </head>
 
 <body>
-
-
-
-
-
-
 
 
 
@@ -516,30 +559,23 @@ select{
 <!-- PANEL 1 -->
 
 <div class="panel">
-<div class="control">
-  <label>SCALE</label>
-<br>
-  <div class="stepper">
 
-    <button
-      type="button"
-      onclick="changeScale(-.05)"
-    >−</button>
+  <div class="control">
+    <label>SCALE</label>
 
     <input
-      id="scaleValue"
-      type="text"
-      value="45%"
-      readonly
+      id="scaleSlider"
+      type="range"
+      min="20"
+      max="90"
+      step="5"
+      value="57.5"
+      oninput="pageScale=this.value/100;applyScale()"
     >
 
-    <button
-      type="button"
-      onclick="changeScale(.05)"
-    >+</button>
-
+    <span id="scaleValue">58%</span>
   </div>
-</div>
+
 </div>
 
 
@@ -554,34 +590,57 @@ select{
       <div class="control">
         <label for="far">FAR RX</label>
 
-        <div class="stepper">
-          <button type="button" onclick="stepInput('far',-.25)">−</button>
-          <input id="far" type="number" value="-2.00" step="0.25">
-          <button type="button" onclick="stepInput('far',.25)">+</button>
-        </div>
+        <input
+          id="far"
+          type="range"
+          min="-10"
+          max="6"
+          step="0.25"
+          value="-2"
+          oninput="
+            this.nextElementSibling.textContent=
+            parseFloat(this.value).toFixed(2)+' D';
+            this.dispatchEvent(new Event('change'))
+          "
+        >
 
-        <span class="unit">D</span>
+        <span class="sliderValue">-2.00 D</span>
       </div>
 
 
       <div class="control">
         <label for="add">ADD</label>
 
-        <div class="stepper">
-          <button type="button" onclick="stepInput('add',-.25)">−</button>
-          <input id="add" type="number" value="2.00" min="0.25" step="0.25">
-          <button type="button" onclick="stepInput('add',.25)">+</button>
-        </div>
+        <input
+          id="add"
+          type="range"
+          min="0.25"
+          max="5"
+          step="0.25"
+          value="2"
+          oninput="
+            this.nextElementSibling.textContent=
+            parseFloat(this.value).toFixed(2)+' D';
+            this.dispatchEvent(new Event('change'))
+          "
+        >
 
-        <span class="unit">D</span>
+        <span class="sliderValue">2.00 D</span>
       </div>
 
     </div>
 
 
     <div class="toggle">
-      <button id="addMode" class="active">ADD</button>
-      <button id="finalMode">FINAL</button>
+
+      <button id="addMode" class="active">
+        ADD
+      </button>
+
+      <button id="finalMode">
+        FINAL
+      </button>
+
     </div>
 
   </div>
@@ -593,27 +652,25 @@ select{
 
     <div class="eyeControl">
 
-
-
       <label>EYE POINT</label>
 
-      <div class="eyeButtons">
+      <input
+        id="eyePointSlider"
+        type="range"
+        min="0"
+        max="50"
+        step="1"
+        value="16"
+        oninput="
+          eyePoint=parseInt(this.value);
+          updateEyeControls();
+          draw();
+        "
+      >
 
-        <button
-          type="button"
-          onclick="moveEyePoint(-1)"
-          title="Move Eye Point up 1 mm"
-        >↑</button>
-
-        <button
-          type="button"
-          onclick="moveEyePoint(1)"
-          title="Move Eye Point down 1 mm"
-        >↓</button>
-
-      </div>
-
-      <span id="eyePointValue" class="eyeValue">16 MM</span>
+      <span id="eyePointValue" class="eyeValue">
+        16 MM
+      </span>
 
       <button
         type="button"
@@ -623,9 +680,6 @@ select{
       >
         EYE POINT: ON
       </button>
-
-
-
 
     </div>
 
@@ -638,37 +692,58 @@ select{
 
 <div class="panel">
 
-  <div class="sectionTitle">HEAT MAP & LENS DESIGN</div>
+  <div class="sectionTitle">
+    HEAT MAP & LENS DESIGN
+  </div>
 
   <div class="panelRow">
 
     <div class="inputs">
 
       <div class="control">
-        <label for="selectedAdd">HEATMAP MAX ADD</label>
 
-        <div class="stepper">
-          <button type="button" onclick="stepInput('selectedAdd',-.25)">−</button>
-          <input id="selectedAdd" type="number" value="3.00" min="0.25" step="0.25">
-          <button type="button" onclick="stepInput('selectedAdd',.25)">+</button>
-        </div>
+        <label for="selectedAdd">
+          HEATMAP MAX ADD
+        </label>
 
-        <span class="unit">D</span>
+        <input
+          id="selectedAdd"
+          type="range"
+          min="0.25"
+          max="5"
+          step="0.25"
+          value="3"
+          oninput="
+            this.nextElementSibling.textContent=
+            parseFloat(this.value).toFixed(2)+' D';
+            this.dispatchEvent(new Event('change'))
+          "
+        >
+
+        <span class="sliderValue">
+          3.00 D
+        </span>
+
       </div>
 
     </div>
 
 
     <div class="toggle">
-      <button id="relativeMode">RELATIVE</button>
-      <button id="selectedMode" class="active">SELECTED</button>
+
+      <button id="relativeMode">
+        RELATIVE
+      </button>
+
+      <button id="selectedMode" class="active">
+        SELECTED
+      </button>
+
     </div>
 
   </div>
 
 </div>
-
-
 
 <!-- LENS TITLES -->
 
@@ -865,19 +940,20 @@ const rulers=[
 
 ];
 
-
-const HEIGHT=50;
-
-
 let mode="add";
 
 let heatMode="selected";
 
 
+const HEIGHT=100;
+const OFFSET=25;
+
 function y(mm){
+  return (mm+OFFSET)/HEIGHT*100;
+}
 
-  return mm/HEIGHT*100
-
+function h(mm){
+  return mm/HEIGHT*100;
 }
 
 
@@ -1058,7 +1134,7 @@ function drawHeat1(plot,add){
   let mm=0;
 
 
-  while(mm<50){
+  while(mm<75){
 
     let regionPower=0;
 
@@ -1141,7 +1217,7 @@ function drawHeat1(plot,add){
         );
 
 
-      next=50;
+      next=75;
     }
 
 
@@ -1156,8 +1232,8 @@ function drawHeat1(plot,add){
       y(mm)+"%";
 
 
-    slice.style.height=
-      y(next-mm)+.2+"%";
+slice.style.height=
+  h(next-mm)+.2+"%";
 
 
     if(regionColor!==null){
@@ -1209,7 +1285,7 @@ function drawHeat2(plot,add,corridor){
   let mm=0;
 
 
-  while(mm<50){
+  while(mm<75){
 
     let regionPower=0;
 
@@ -1293,7 +1369,7 @@ function drawHeat2(plot,add,corridor){
         );
 
 
-      next=50;
+      next=75;
     }
 
 
@@ -1308,8 +1384,8 @@ function drawHeat2(plot,add,corridor){
       y(mm)+"%";
 
 
-    slice.style.height=
-      y(next-mm)+.2+"%";
+slice.style.height=
+  h(next-mm)+.2+"%";
 
 
     if(regionColor!==null){
@@ -1792,7 +1868,7 @@ function drawRuler(ruler){
 
   for(
     let mm=0;
-    mm<=50;
+    mm<=100;
     mm++
   ){
 
@@ -1803,8 +1879,8 @@ function drawRuler(ruler){
     tick.className="tick";
 
 
-    tick.style.top=
-      y(mm)+"%";
+tick.style.top=
+  mm+"%";
 
 
     if(mm%5===0)
@@ -1823,8 +1899,8 @@ function drawRuler(ruler){
       label.className="mm";
 
 
-      label.style.top=
-        y(mm)+"%";
+label.style.top=
+  mm+"%";
 
 
       label.textContent=
