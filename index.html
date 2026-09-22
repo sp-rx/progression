@@ -273,6 +273,13 @@ select{
   pointer-events:none
 }
 
+.heatClip{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+
 .line{
   position:absolute;
   left:0;
@@ -566,7 +573,7 @@ input[type="range"]::-moz-range-thumb{
 
 <!-- TWO LENSES -->
 
-<div style="margin-top:-270px; margin-bottom:-250px" class="graphs">
+<div style="margin-top:-250px; margin-bottom:-250px" class="graphs">
   <div class="graph">
     <div id="ruler1" class="ruler"></div>
     <div id="plot1" class="plot"></div>
@@ -584,14 +591,14 @@ input[type="range"]::-moz-range-thumb{
 </div>
 <div style="margin-bottom:20px" class="lensTitles">
 
-  <span style="margin-left:250px" class="lensTitle">
-    OFFICE LENS DESIGN
+  <span style="margin-left:280px" class="lensTitle">
+    OFFICE LENS 
 </span>
 
 
-  <span style="margin-left:140px" class="lensTitle">
+  <span style="margin-left:200px" class="lensTitle">
 
-   PROGRESSIVE LENS 
+   PAL LENS 
     <select id="corridor" class="corridorSelect">
 
       <option value="9">9 MM</option>
@@ -676,7 +683,7 @@ input[type="range"]::-moz-range-thumb{
           id="add"
           type="range"
           min="0.25"
-          max="5"
+          max="4"
           step="0.25"
           value="2"
           oninput="
@@ -713,15 +720,15 @@ input[type="range"]::-moz-range-thumb{
 
     <div class="eyeControl">
 
-      <label>EYE POINT</label>
+      <label>FITTING POSITION</label>
 
       <input
         id="eyePointSlider"
         type="range"
         min="0"
-        max="50"
+        max="32"
         step="1"
-        value="16"
+        value="20"
         oninput="
           eyePoint=parseInt(this.value);
           updateEyeControls();
@@ -730,7 +737,7 @@ input[type="range"]::-moz-range-thumb{
       >
 
       <span id="eyePointValue" class="eyeValue">
-        16 MM
+        20 MM
       </span>
 
       <button
@@ -868,7 +875,7 @@ function stepInput(id,step){
    The lens design moves relative to it.
 */
 
-let eyePoint=16;
+let eyePoint=20;
 
 let eyePointVisible=true;
 
@@ -916,9 +923,14 @@ function moveEyePoint(amount){
 
 function updateEyeControls(){
 
+  const crossPosition=20;
+
+  const span=
+    crossPosition-eyePoint;
+
   document.getElementById("eyePointValue")
     .textContent=
-      eyePoint.toFixed(0)+" MM";
+      span.toFixed(0)+" MM";
 
 }
 
@@ -1177,6 +1189,9 @@ function darkenColor(color,amount=.25){
 ========================================================= */
 
 function drawHeat1(plot,add){
+  const heatClip=document.createElement("div");
+  heatClip.className="heatClip";
+  plot.appendChild(heatClip);
 
   const reference=
     heatMode==="relative"
@@ -1273,7 +1288,7 @@ function drawHeat1(plot,add){
         );
 
 
-      next=75;
+      next=100;
     }
 
 
@@ -1308,8 +1323,7 @@ function drawHeat1(plot,add){
     }
 
 
-    plot.appendChild(slice);
-
+heatClip.appendChild(slice);
 
     mm=next;
 
@@ -1323,6 +1337,9 @@ function drawHeat1(plot,add){
 ========================================================= */
 
 function drawHeat2(plot,add,corridor){
+  const heatClip=document.createElement("div");
+  heatClip.className="heatClip";
+  plot.appendChild(heatClip);
 
   const reference=
     heatMode==="relative"
@@ -1425,7 +1442,7 @@ function drawHeat2(plot,add,corridor){
         );
 
 
-      next=75;
+      next=100;
     }
 
 
@@ -1460,8 +1477,7 @@ function drawHeat2(plot,add,corridor){
     }
 
 
-    plot.appendChild(slice);
-
+heatClip.appendChild(slice);
 
     mm=next;
 
