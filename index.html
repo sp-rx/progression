@@ -261,7 +261,7 @@ select{
 
 .plot{
   position:relative;
-  width:750px;
+  width:500px;
   height:600px;
   overflow:visible;
   background:#fffdf7;
@@ -2000,7 +2000,7 @@ draw();
 
 
 <script>
-let pageScale=.45;
+let pageScale=.7;
 
 function applyScale(){
 
@@ -2008,7 +2008,7 @@ function applyScale(){
     `scale(${pageScale})`;
 
   document.getElementById("scaleValue").value=
-    Math.round((pageScale/.45)*100)+"%";
+    Math.round((pageScale/.7)*100)+"%";
 
 }
 
