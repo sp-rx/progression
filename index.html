@@ -198,13 +198,13 @@ select{
 .lensTitles{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:70px;
-  margin:26px 0 10px;
+  gap:100px;
+  margin:0 0 20px;
 }
 
 .lensTitle{
   text-align:center;
-  font-size:11px;
+  font-size:25px;
   letter-spacing:1px;
   color:#555;
 }
@@ -559,6 +559,13 @@ input[type="range"]::-moz-range-thumb{
 
 <!-- LENS TITLES -->
 
+
+
+
+
+
+<div class="app">
+
 <div class="lensTitles">
 
   <div class="lensTitle">
@@ -581,12 +588,6 @@ input[type="range"]::-moz-range-thumb{
   </div>
 
 </div>
-
-
-
-
-<div class="app">
-
 
 <!-- TWO LENSES -->
 
@@ -2157,7 +2158,7 @@ draw();
 
 
 <script>
-let pageScale=.62;
+let pageScale=.575;
 
 function applyScale(){
 
@@ -2165,7 +2166,7 @@ function applyScale(){
     `scale(${pageScale})`;
 
   document.getElementById("scaleValue").value=
-    Math.round((pageScale/.62)*100)+"%";
+    Math.round((pageScale/.575)*100)+"%";
 
 }
 
