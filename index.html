@@ -261,7 +261,7 @@ select{
 
 .plot{
   position:relative;
-  width:650px;
+  width:750px;
   height:600px;
   overflow:visible;
   background:#fffdf7;
@@ -374,10 +374,10 @@ select{
 .eyeMarker{
   position:absolute;
   left:50%;
-  width:100px;
-  height:100px;
+  width:75px;
+  height:75px;
   transform:translate(-50%,-50%);
-  border:6px solid rgba(185,74,58,0.2);
+  border:6px solid rgba(185,74,58,0.7);
   border-radius:50%;
   pointer-events:none;
 }
@@ -984,25 +984,25 @@ function heatColor(power,reference){
   );
 
 
-  const colors=[
+const colors=[
 
-    [248,235,232],
-    [245,225,221],
-    [242,215,211],
-    [239,205,200],
-    [236,195,189],
-    [232,185,178],
-    [228,175,167],
-    [224,165,156],
-    [220,155,145],
-    [216,145,134],
-    [211,135,123],
-    [206,125,112],
-    [201,115,101],
-    [196,105,90],
-    [191,95,80]
+  [252,242,231],
+  [250,235,218],
+  [248,228,205],
+  [246,221,192],
+  [244,214,179],
+  [242,207,166],
+  [240,200,153],
+  [238,193,140],
+  [236,186,127],
+  [234,179,114],
+  [232,172,101],
+  [230,165,88],
+  [228,158,75],
+  [226,151,62],
+  [224,144,49]
 
-  ];
+];
 
   const c=colors[steps-1];
 
@@ -1476,7 +1476,7 @@ function addEyeMarkers(plot){
     line.style.height="3px";
     line.style.top=y(mm)+"%";
     line.style.transform="translate(-50%,-50%)";
-    line.style.background="rgba(185,74,58,0.5)";
+    line.style.background="rgba(185,74,58,0.7)";
     line.style.pointerEvents="none";
     line.style.zIndex="20";
 
