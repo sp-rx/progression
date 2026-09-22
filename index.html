@@ -198,18 +198,19 @@ select{
 .lensTitles{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
+  gap:350px;
   margin:0 0 10px;
 }
 
 .lensTitle{
   text-align:center;
-  font-size:12px;
+  font-size:20px;
   letter-spacing:1px;
   color:#555;
 }
 
 .design2Title{
+  text-align:center;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -217,10 +218,9 @@ select{
 }
 
 .corridorSelect{
-  width:72px;
+  width:102px;
   height:28px;
-  font-size:11px;
-  padding:3px 6px;
+  font-size:12px;
 }
 
 
@@ -568,14 +568,38 @@ input[type="range"]::-moz-range-thumb{
 
 
 <!-- TWO LENSES -->
+<div style="margin-top:-250px" class="lensTitles">
 
-<div style="margin-top:-200px; margin-bottom:-200px" class="graphs">
+  <div class="lensTitle">
+    DESIGN 1
+  </div>
+
+  <div class="lensTitle design2Title">
+
+    <span>DESIGN 2</span>
+
+    <select id="corridor" class="corridorSelect">
+
+      <option value="9">9 MM</option>
+      <option value="11" selected>11 MM</option>
+      <option value="13">13 MM</option>
+      <option value="15">15 MM</option>
+
+    </select>
+
+  </div>
+
+</div>
+
+
+<div style="margin-top:0; margin-bottom:-230px" class="graphs">
 
   <div class="graph">
 
     <div id="ruler1" class="ruler"></div>
 
     <div id="plot1" class="plot"></div>
+
 
   </div>
 
@@ -606,30 +630,9 @@ input[type="range"]::-moz-range-thumb{
 
 
 <!-- PANEL 1 -->
-<div style="margin-bottom:50px" class="lensTitles">
 
-  <div class="lensTitle">
-    DESIGN 1
-  </div>
 
-  <div class="lensTitle design2Title">
-
-    <span>DESIGN 2</span>
-
-    <select id="corridor" class="corridorSelect">
-
-      <option value="9">9 MM</option>
-      <option value="11" selected>11 MM</option>
-      <option value="13">13 MM</option>
-      <option value="15">15 MM</option>
-
-    </select>
-
-  </div>
-
-</div>
-
-<div class="panel">
+<div style="display:none" class="panel">
 
   <div class="control">
     <label>SCALE</label>
