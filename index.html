@@ -986,21 +986,23 @@ function heatColor(power,reference){
 
   const colors=[
 
-    [225,215,235],
-    [205,190,225],
-    [185,175,220],
-    [185,215,205],
-    [165,220,185],
-    [145,215,165],
-    [190,225,155],
-    [225,225,155],
-    [240,220,145],
-    [245,205,145],
-    [245,190,155],
-    [245,175,165]
+    [248,235,232],
+    [245,225,221],
+    [242,215,211],
+    [239,205,200],
+    [236,195,189],
+    [232,185,178],
+    [228,175,167],
+    [224,165,156],
+    [220,155,145],
+    [216,145,134],
+    [211,135,123],
+    [206,125,112],
+    [201,115,101],
+    [196,105,90],
+    [191,95,80]
 
   ];
-
 
   const c=colors[steps-1];
 
@@ -1135,7 +1137,7 @@ function drawHeat1(plot,add){
       regionColor=
         darkenColor(
           topColor,
-          .1
+          .0
         );
 
 
@@ -1287,7 +1289,7 @@ function drawHeat2(plot,add,corridor){
       regionColor=
         darkenColor(
           topColor,
-          .1
+          .0
         );
 
 
@@ -2000,7 +2002,7 @@ draw();
 
 
 <script>
-let pageScale=.7;
+let pageScale=.6;
 
 function applyScale(){
 
@@ -2008,7 +2010,7 @@ function applyScale(){
     `scale(${pageScale})`;
 
   document.getElementById("scaleValue").value=
-    Math.round((pageScale/.7)*100)+"%";
+    Math.round((pageScale/.6)*100)+"%";
 
 }
 
