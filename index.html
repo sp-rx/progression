@@ -466,6 +466,7 @@ input[type="range"]::-webkit-slider-runnable-track{
   height:4px;
   background:#d8d1c5;
   border-radius:4px;
+
 }
 
 input[type="range"]::-webkit-slider-thumb{
@@ -548,35 +549,31 @@ input[type="range"]::-moz-range-thumb{
 </div>
 
 <div
-  style="margin-bottom:50px;display:flex;justify-content:center;align-items:center;gap:20px"
+  style="margin-top:20px; margin-bottom:20px;display:flex;justify-content:center;align-items:center;gap:20px"
   class="lensTitles"
 >
 
   <div class="toggle" style="width:max-content;margin:0">
 
-    <button
-      id="officeLensMode"
+    <button       id="officeLensMode"
       class="active"
       type="button"
-    >
-      OFFICE LENS
+    ><span class="lensTitle">
+      OFFICE LENS CORRIDOR 18 MM</span>
     </button>
 
     <button
       id="palLensMode"
       type="button"
-    >
-      PAL LENS
-    </button>
+    ><span class="lensTitle">
+      PAL LENS</span>
 
-  </div>
 
-  <div
+  <span
     id="corridorControl"
-    style="display:flex;justify-content:center;align-items:center;gap:10px;margin:0"
   >
 
-    <span class="lensTitle">
+    <span  style="margin-left:5px" class="lensTitle">
       CORRIDOR
     </span>
 
@@ -596,7 +593,15 @@ input[type="range"]::-moz-range-thumb{
       11 MM
     </span>
 
+  </span>
+
+
+
+    </button>
+
   </div>
+
+
 
 </div>
 <script>
