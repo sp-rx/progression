@@ -303,7 +303,7 @@ select{
 
 .zoneLabel{
   position:absolute;
-  left:35%;
+  left:25%;
   transform:translate(-50%,-50%);
   font-size:15px;
   letter-spacing:1px;
@@ -364,8 +364,8 @@ select{
 .completeCircle{
   position:absolute;
   left:50%;
-  width:100px;
-  height:100px;
+  width:96px;
+  height:96px;
   transform:translate(-50%,-50%);
   border:2px solid #555;
   border-radius:50%;
@@ -1642,8 +1642,10 @@ function addEyeMarkers(plot){
 
 
     line.style.position="absolute";
-    line.style.left="50%";
-    line.style.width="50px";
+line.style.left=
+  `calc(50% + ${circleOffsetX()}%)`;
+
+line.style.width="48px";
     line.style.height="3px";
 
     /*
@@ -1676,7 +1678,7 @@ let circleOffset=2.5;
 
 
 /*
-   Plot width = 680 px.
+   Plot width = 600 px.
 
    50 mm lens width is represented by the full plot,
    therefore 2.5 mm = 5% of the plot width.
