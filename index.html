@@ -743,7 +743,6 @@ function updateCorridor(value){
         20 MM
       </span>
 
-    </div>
 
 
   <button
@@ -755,8 +754,11 @@ function updateCorridor(value){
     CIRCLE: RIGHT
   </button>
 
+      <label style="margin-left:20px">FITTING HEIGHT FOR EDGING</label>
 
+<span id="netFittingHeightValue" class="eyeValue">10 MM</span>
 
+    </div>
 
 
 
@@ -979,12 +981,34 @@ function updateEyeControls(){
   const crossPosition=20;
 
   const span=
-    crossPosition-eyePoint;
+    eyePoint-crossPosition;
 
   document.getElementById("eyePointValue")
     .textContent=
       span.toFixed(0)+" MM";
 
+  updateNetFittingHeight();
+
+}
+
+function updateNetFittingHeight(){
+
+  const eyePoint =
+    parseFloat(
+      document.getElementById("eyePointValue").textContent
+    ) || 0;
+
+  const fittingPosition =
+    parseFloat(
+      document.getElementById("fittingHeightValue").textContent
+    ) || 0;
+
+  const net =
+    eyePoint + fittingPosition;
+
+  document.getElementById("netFittingHeightValue")
+    .textContent =
+      net.toFixed(0)+" MM";
 }
 
 
@@ -2425,7 +2449,6 @@ document.getElementById("fittingHeight")
 
   });
 </script>
-
 
 
 
