@@ -695,7 +695,7 @@ function updateCorridor(value){
     id="fittingHeight"
     min="20"
     max="35"
-    step=".5"
+    step="1"
     value="26"
   >
 
@@ -710,26 +710,14 @@ function updateCorridor(value){
         EYE POINT: ON
       </button>
 
-</div>
-</div>
 
-
-
-
-  <div class="eyeControls">
-
-    <div class="eyeControl">
-
-
-
-
-      <label>FITTING POSITION</label>
+      <label style="margin-left:100px" >FITTING POSITION</label>
 
       <input
         id="eyePointSlider"
         type="range"
-        min="0"
-        max="32"
+        min="10"
+        max="30"
         step="1"
         value="20"
         oninput="
@@ -753,8 +741,22 @@ function updateCorridor(value){
   >
     CIRCLE: RIGHT
   </button>
+</div>
+</div>
 
-      <label style="margin-left:20px">FITTING HEIGHT FOR EDGING</label>
+
+
+
+  <div class="eyeControls">
+
+    <div class="eyeControl">
+
+
+
+
+
+
+      <label>FITTING HEIGHT FOR EDGING</label>
 
 <span id="netFittingHeightValue" class="eyeValue">10 MM</span>
 
