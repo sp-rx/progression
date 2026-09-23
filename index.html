@@ -546,44 +546,69 @@ input[type="range"]::-moz-range-thumb{
 
 
 </div>
-<div style="margin-bottom:50px" class="lensTitles">
 
-  <span style="margin-left:280px" class="lensTitle">
-    OFFICE LENS 
-</span>
-
-
-  <span style="margin-left:400px" class="lensTitle">
-
-   PAL LENS 
-<input style="width:70px"
-  type="range"
-  id="corridor"
-  class="corridorSlider"
-  min="9"
-  max="15"
-  step="2"
-  value="11"
-  oninput="updateCorridor(this.value)"
+<div
+  style="margin-bottom:50px;display:flex;justify-content:center;align-items:center;gap:20px"
+  class="lensTitles"
 >
 
-<span id="corridorValue">11 MM</span>
+  <div class="toggle" style="width:max-content;margin:0">
 
-<script>
-function updateCorridor(value){
-  document.getElementById("corridorValue").textContent=value+" MM";
-  draw();
-}
-</script>
+    <button
+      id="officeLensMode"
+      class="active"
+      type="button"
+    >
+      OFFICE LENS
+    </button>
 
-</span>
+    <button
+      id="palLensMode"
+      type="button"
+    >
+      PAL LENS
+    </button>
 
+  </div>
 
+  <div
+    id="corridorControl"
+    style="display:flex;justify-content:center;align-items:center;gap:10px;margin:0"
+  >
 
+    <span class="lensTitle">
+      CORRIDOR
+    </span>
+
+    <input
+      style="width:70px"
+      type="range"
+      id="corridor"
+      class="corridorSlider"
+      min="9"
+      max="15"
+      step="2"
+      value="11"
+      oninput="updateCorridor(this.value)"
+    >
+
+    <span class="lensTitle" id="corridorValue">
+      11 MM
+    </span>
+
+  </div>
 
 </div>
+<script>
+function updateCorridor(value){
 
+  document.getElementById("corridorValue")
+    .textContent=value+" MM";
 
+  draw();
+
+}
+</script>
 
 
 
@@ -733,14 +758,7 @@ function updateCorridor(value){
 
 
 
-  <button
-    type="button"
-    id="circleOffsetToggle"
-    class="eyePointToggle"
-    onclick="toggleCircleOffset()"
-  >
-    CIRCLE: RIGHT
-  </button>
+ 
 </div>
 </div>
 
@@ -889,7 +907,47 @@ function addFittingHeightLine(plot){
 
 
 
+function setLensMode(mode){
 
+  lensMode=mode;
+
+  const office=
+    document.getElementById("officeLensMode");
+
+  const pal=
+    document.getElementById("palLensMode");
+
+  const corridor=
+    document.getElementById("corridorControl");
+
+
+if(mode==="office"){
+  office.classList.add("active");
+  pal.classList.remove("active");
+}else{
+  pal.classList.add("active");
+  office.classList.remove("active");
+}
+
+  draw();
+
+}
+
+
+document.getElementById("officeLensMode")
+  .onclick=function(){
+
+    setLensMode("office");
+
+  };
+
+
+document.getElementById("palLensMode")
+  .onclick=function(){
+
+    setLensMode("pal");
+
+  };
 
 
 
@@ -1065,6 +1123,8 @@ const rulers=[
 let mode="add";
 
 let heatMode="selected";
+
+let lensMode="office";
 
 
 const HEIGHT=100;
@@ -1777,40 +1837,7 @@ function addEyeMarkers(plot){
    COMPLETE CIRCLE OFFSET
 ========================================================= */
 
-let circleOffset=2.25;
 
-
-/*
-   Plot width = 600 px.
-
-   50 mm lens width is represented by the full plot,
-   therefore 2.5 mm = 5% of the plot width.
-*/
-
-function circleOffsetX(){
-
-  return circleOffset/50*100;
-
-}
-
-
-function toggleCircleOffset(){
-
-  circleOffset=
-    circleOffset===2.25
-      ?-2.25
-      :2.25;
-
-
-  document.getElementById("circleOffsetToggle")
-    .textContent=
-      "CIRCLE: "+
-      (circleOffset>0?"RIGHT":"LEFT");
-
-
-  draw();
-
-}
 
 
 function addCompleteCircleConnection(
@@ -1895,7 +1922,7 @@ function addCompleteCircleConnection(
    DESIGN 1 MARKERS
 ========================================================= */
 
-function addMarkers1(plot){
+function addMarkers1(plot,plotIndex){
 
   const c=
     document.createElement("div");
@@ -1932,11 +1959,9 @@ function addMarkers1(plot){
   circle.style.top=
     lensY(42.5)+"%";
 
-  circle.style.left=
-    `calc(50% + ${circleOffsetX()}%)`;
+circle.style.left=
+  `calc(50% + ${plotIndex===0?30.6:-30.6}px)`;
 
-
-  plot.appendChild(circle);
 
 
   /*
@@ -1957,7 +1982,7 @@ addEyeMarkers(plot);
    DESIGN 2 MARKERS
 ========================================================= */
 
-function addMarkers2(plot,corridor){
+function addMarkers2(plot,corridor,plotIndex){
 
   const farCircle=
     document.createElement("div");
@@ -1998,11 +2023,9 @@ function addMarkers2(plot,corridor){
   nearCircle.style.top=
     lensY(nearStart)+"%";
 
-  nearCircle.style.left=
-    `calc(50% + ${circleOffsetX()}%)`;
+nearCircle.style.left=
+  `calc(50% + ${plotIndex===0?30.6:-30.6}px)`;
 
-
-  plot.appendChild(nearCircle);
 
 
   /*
@@ -2023,9 +2046,10 @@ addEyeMarkers(plot);
    DESIGN 1
 ========================================================= */
 
-function drawDesign1(far,add){
 
-  const plot=plots[0];
+function drawDesign1(far,add,plotIndex=0){
+
+  const plot=plots[plotIndex];
 
 
   plot.innerHTML="";
@@ -2037,9 +2061,10 @@ function drawDesign1(far,add){
   );
 
 
-  addMarkers1(
-    plot
-  );
+addMarkers1(
+  plot,
+  plotIndex
+);
 
 
   addLine(
@@ -2103,9 +2128,10 @@ function drawDesign1(far,add){
    DESIGN 2
 ========================================================= */
 
-function drawDesign2(far,add,corridor){
 
-  const plot=plots[1];
+function drawDesign2(far,add,corridor,plotIndex=0){
+
+  const plot=plots[plotIndex];
 
 
   plot.innerHTML="";
@@ -2124,10 +2150,11 @@ function drawDesign2(far,add,corridor){
   );
 
 
-  addMarkers2(
-    plot,
-    corridor
-  );
+addMarkers2(
+  plot,
+  corridor,
+  plotIndex
+);
 
 
   addLine(
@@ -2256,29 +2283,46 @@ function draw(){
   const far=
     parseFloat(farInput.value)||0;
 
-
   const add=
     Math.max(
       .25,
       parseFloat(addInput.value)||.25
     );
 
-
   const corridor=
     parseInt(corridorInput.value);
 
+  if(lensMode==="office"){
 
-  drawDesign1(
-    far,
-    add
-  );
+    drawDesign1(
+      far,
+      add,
+      0
+    );
 
+    drawDesign1(
+      far,
+      add,
+      1
+    );
 
-  drawDesign2(
-    far,
-    add,
-    corridor
-  );
+  }else{
+
+    drawDesign2(
+      far,
+      add,
+      corridor,
+      0
+    );
+
+    drawDesign2(
+      far,
+      add,
+      corridor,
+      1
+    );
+
+  }
 
 }
 
