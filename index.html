@@ -556,14 +556,25 @@ input[type="range"]::-moz-range-thumb{
   <span style="margin-left:430px" class="lensTitle">
 
    PAL LENS 
-    <select id="corridor" class="corridorSelect">
+<input
+  type="range"
+  id="corridor"
+  class="corridorSlider"
+  min="9"
+  max="15"
+  step="2"
+  value="11"
+  oninput="updateCorridor(this.value)"
+>
 
-      <option value="9">9 MM</option>
-      <option value="11" selected>11 MM</option>
-      <option value="13">13 MM</option>
-      <option value="15">15 MM</option>
+<span id="corridorValue">11 MM</span>
 
-    </select>
+<script>
+function updateCorridor(value){
+  document.getElementById("corridorValue").textContent=value+" MM";
+  draw();
+}
+</script>
 
 </span>
 
@@ -667,11 +678,50 @@ input[type="range"]::-moz-range-thumb{
   </div>
 
 
+
+
+
+
   <!-- EYE POINT CONTROL -->
+
+
+<div class="eyeControls">
+    <div class="eyeControl">
+
+  <label>EYE POINT HEIGHT</label>
+
+  <input
+    type="range"
+    id="fittingHeight"
+    min="20"
+    max="35"
+    step=".5"
+    value="26"
+  >
+
+  <span id="fittingHeightValue" class="eyeValue">26 MM</span>
+
+      <button
+        type="button"
+        onclick="toggleEyePoint()"
+        id="eyePointToggle"
+        class="eyePointToggle"
+      >
+        EYE POINT: ON
+      </button>
+
+</div>
+</div>
+
+
+
 
   <div class="eyeControls">
 
     <div class="eyeControl">
+
+
+
 
       <label>FITTING POSITION</label>
 
@@ -693,15 +743,6 @@ input[type="range"]::-moz-range-thumb{
         20 MM
       </span>
 
-      <button
-        type="button"
-        onclick="toggleEyePoint()"
-        id="eyePointToggle"
-        class="eyePointToggle"
-      >
-        EYE POINT: ON
-      </button>
-
     </div>
 
 
@@ -722,6 +763,8 @@ input[type="range"]::-moz-range-thumb{
 
 
   </div>
+
+
 
 
 
@@ -807,6 +850,43 @@ input[type="range"]::-moz-range-thumb{
 
 
 <script>
+
+
+
+
+let fittingHeight=26;
+
+function addFittingHeightLine(plot){
+
+  if(!eyePointVisible)
+    return;
+
+  const line=document.createElement("div");
+
+  line.style.position="absolute";
+  line.style.left="0";
+  line.style.width="100%";
+  line.style.height="6px";
+
+  line.style.top=
+    (y(16)+(fittingHeight/HEIGHT*100))+"%";
+
+  line.style.transform="translateY(-50%)";
+
+  line.style.background=
+    "repeating-linear-gradient(to right,rgba(185,74,58,0.7) 0 4px,transparent 4px 12px)";
+
+  line.style.pointerEvents="none";
+  line.style.zIndex="18";
+
+  plot.appendChild(line);
+}
+
+
+
+
+
+
 
 
 /* =========================================================
@@ -1631,41 +1711,38 @@ function addEyeMarkers(plot){
      permanent eye marker.
   */
 
-  [16,18,20].forEach(offset=>{
+[16,18,20].forEach(offset=>{
 
-    const mm=
-      eyePoint+offset;
+  const mm = eyePoint + offset;
 
+  const lineLeft = document.createElement("div");
 
-    const line=
-      document.createElement("div");
+  lineLeft.style.position = "absolute";
+  lineLeft.style.left = "calc(50% - 54px)";
+  lineLeft.style.width = "48px";
+  lineLeft.style.height = "3px";
+  lineLeft.style.top = lensY(mm) + "%";
+  lineLeft.style.background = "rgba(185,74,58,0.7)";
+  lineLeft.style.pointerEvents = "none";
+  lineLeft.style.zIndex = "20";
 
-
-    line.style.position="absolute";
-line.style.left=
-  `calc(50% + ${circleOffsetX()}%)`;
-
-line.style.width="48px";
-    line.style.height="3px";
-
-    /*
-       Use lensY so the Eye Point movement
-       cancels out and these lines remain
-       fixed relative to the eye marker.
-    */
-
-    line.style.top=
-      lensY(mm)+"%";
-
-    line.style.transform="translate(-50%,-50%)";
-    line.style.background="rgba(185,74,58,0.7)";
-    line.style.pointerEvents="none";
-    line.style.zIndex="20";
+  plot.appendChild(lineLeft);
 
 
-    plot.appendChild(line);
+  const lineRight = document.createElement("div");
 
-  });
+  lineRight.style.position = "absolute";
+  lineRight.style.left = "calc(50% + 6px)";
+  lineRight.style.width = "48px";
+  lineRight.style.height = "3px";
+  lineRight.style.top = lensY(mm) + "%";
+  lineRight.style.background = "rgba(185,74,58,0.7)";
+  lineRight.style.pointerEvents = "none";
+  lineRight.style.zIndex = "20";
+
+  plot.appendChild(lineRight);
+
+});
 
 }
 
@@ -1674,7 +1751,7 @@ line.style.width="48px";
    COMPLETE CIRCLE OFFSET
 ========================================================= */
 
-let circleOffset=2.5;
+let circleOffset=2.25;
 
 
 /*
@@ -1694,9 +1771,9 @@ function circleOffsetX(){
 function toggleCircleOffset(){
 
   circleOffset=
-    circleOffset===2.5
-      ?-2.5
-      :2.5;
+    circleOffset===2.25
+      ?-2.25
+      :2.25;
 
 
   document.getElementById("circleOffsetToggle")
@@ -1842,9 +1919,11 @@ function addMarkers1(plot){
   */
 
 
+plot.appendChild(circle);
 
+addFittingHeightLine(plot);
 
-  addEyeMarkers(plot);
+addEyeMarkers(plot);
 
 }
 
@@ -1906,9 +1985,11 @@ function addMarkers2(plot,corridor){
   */
 
 
+plot.appendChild(nearCircle);
 
+addFittingHeightLine(plot);
 
-  addEyeMarkers(plot);
+addEyeMarkers(plot);
 
 }
 
@@ -2329,7 +2410,21 @@ function changeScale(amount){
 
 window.addEventListener("load",applyScale);
 </script>
+<script>
+document.getElementById("fittingHeight")
+  .addEventListener("input",function(){
 
+    fittingHeight=
+      parseFloat(this.value);
+
+    document.getElementById("fittingHeightValue")
+      .textContent=
+        fittingHeight+" MM";
+
+    draw();
+
+  });
+</script>
 
 
 
