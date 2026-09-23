@@ -215,7 +215,7 @@ select{
 
 .corridorSelect{
   width:102px;
-  height:35px;
+  height:28px;
   font-size:12px;
   margin-left:10px;
 }
@@ -284,11 +284,11 @@ select{
   position:absolute;
   left:0;
   width:100%;
-  height:1px;
+  height:2px;
   background:repeating-linear-gradient(
     to right,
-    rgba(60,60,60,.35) 0 2px,
-    transparent 2px 7px
+    rgba(60,60,60,.48) 0 3px,
+    transparent 3px 7px
   )
 }
 
@@ -372,6 +372,13 @@ select{
   pointer-events:none
 }
 
+.circleConnect{
+  position:absolute;
+  height:2px;
+  background:#555;
+  transform-origin:left center;
+  pointer-events:none;
+}
 
 /* EYE POINT */
 
@@ -495,6 +502,8 @@ input[type="range"]::-moz-range-thumb{
   text-align:center;
 }
 
+
+
 </style>
 </head>
 
@@ -558,14 +567,10 @@ input[type="range"]::-moz-range-thumb{
 
 </span>
 
+
+
+
 </div>
-
-
-
-
-
-
-
 
 
 
@@ -699,7 +704,27 @@ input[type="range"]::-moz-range-thumb{
 
     </div>
 
+
+  <button
+    type="button"
+    id="circleOffsetToggle"
+    class="eyePointToggle"
+    onclick="toggleCircleOffset()"
+  >
+    CIRCLE: RIGHT
+  </button>
+
+
+
+
+
+
+
+
   </div>
+
+
+
 
 </div>
 
@@ -726,9 +751,9 @@ input[type="range"]::-moz-range-thumb{
           id="selectedAdd"
           type="range"
           min="0.25"
-          max="5"
+          max="4"
           step="0.25"
-          value="3"
+          value="2"
           oninput="
             this.nextElementSibling.textContent=
             parseFloat(this.value).toFixed(2)+' D';
@@ -737,7 +762,7 @@ input[type="range"]::-moz-range-thumb{
         >
 
         <span class="sliderValue">
-          3.00 D
+          2.00 D
         </span>
 
       </div>
@@ -1067,42 +1092,86 @@ function heatColor(power,reference){
   );
 
 
-  const steps=Math.max(
-    1,
-    Math.min(
-      12,
-      Math.round(t*12)
-    )
-  );
+  /*
+     WHITE
+       ↓
+     PALE GREEN
+       ↓
+     GREEN
+       ↓
+     YELLOW
+       ↓
+     ORANGE
+       ↓
+     RED
+  */
 
+const stops=[
 
-const colors=[
-
-  [252,242,231],
-  [250,235,218],
-  [248,228,205],
-  [246,221,192],
-  [244,214,179],
-  [242,207,166],
-  [240,200,153],
-  [238,193,140],
-  [236,186,127],
-  [234,179,114],
-  [232,172,101],
-  [230,165,88],
-  [228,158,75],
-  [226,151,62],
-  [224,144,49]
+  {p:0.00,c:[255,253,247]},  // white
+  {p:0.15,c:[250,248,225]},  // very pale yellow
+  {p:0.30,c:[246,241,198]},  // pale yellow
+  {p:0.45,c:[232,231,180]},  // yellow-green
+  {p:0.60,c:[211,222,177]},  // light green
+  {p:0.75,c:[190,210,174]},  // soft green
+  {p:0.88,c:[173,201,169]},  // pale green
+  {p:1.00,c:[158,193,165]}   // light green
 
 ];
 
-  const c=colors[steps-1];
+
+  let lower=stops[0];
+  let upper=stops[stops.length-1];
 
 
-  return `rgb(${c[0]},${c[1]},${c[2]})`;
+  for(let i=0;i<stops.length-1;i++){
+
+    if(t>=stops[i].p && t<=stops[i+1].p){
+
+      lower=stops[i];
+      upper=stops[i+1];
+
+      break;
+
+    }
+
+  }
+
+
+  const range=
+    upper.p-lower.p;
+
+
+  const localT=
+    range>0
+      ?(t-lower.p)/range
+      :0;
+
+
+  const r=
+    Math.round(
+      lower.c[0]+
+      (upper.c[0]-lower.c[0])*localT
+    );
+
+
+  const g=
+    Math.round(
+      lower.c[1]+
+      (upper.c[1]-lower.c[1])*localT
+    );
+
+
+  const b=
+    Math.round(
+      lower.c[2]+
+      (upper.c[2]-lower.c[2])*localT
+    );
+
+
+  return `rgb(${r},${g},${b})`;
 
 }
-
 
 /* =========================================================
    DARKEN
@@ -1146,7 +1215,7 @@ function drawHeat1(plot,add){
       ?add
       :Math.max(
           .25,
-          parseFloat(selectedAddInput.value)||.25
+  (parseFloat(selectedAddInput.value)||.25)+.25
         );
 
 
@@ -1215,11 +1284,11 @@ function drawHeat1(plot,add){
 
     }else{
 
-      const topPower=
-        Math.max(
-          .25,
-          Math.floor(add/.25)*.25
-        );
+const topPower=
+  Math.min(
+    reference,
+    Math.floor(add/.25)*.25 + .25
+  );
 
 
       const topColor=
@@ -1294,7 +1363,7 @@ function drawHeat2(plot,add,corridor){
       ?add
       :Math.max(
           .25,
-          parseFloat(selectedAddInput.value)||.25
+  (parseFloat(selectedAddInput.value)||.25)+.25
         );
 
 
@@ -1369,11 +1438,11 @@ function drawHeat2(plot,add,corridor){
 
     }else{
 
-      const topPower=
-        Math.max(
-          .25,
-          Math.floor(add/.25)*.25
-        );
+const topPower=
+  Math.min(
+    reference,
+    Math.floor(add/.25)*.25 + .25
+  );
 
 
       const topColor=
@@ -1600,6 +1669,124 @@ function addEyeMarkers(plot){
 
 
 /* =========================================================
+   COMPLETE CIRCLE OFFSET
+========================================================= */
+
+let circleOffset=2.5;
+
+
+/*
+   Plot width = 680 px.
+
+   50 mm lens width is represented by the full plot,
+   therefore 2.5 mm = 5% of the plot width.
+*/
+
+function circleOffsetX(){
+
+  return circleOffset/50*100;
+
+}
+
+
+function toggleCircleOffset(){
+
+  circleOffset=
+    circleOffset===2.5
+      ?-2.5
+      :2.5;
+
+
+  document.getElementById("circleOffsetToggle")
+    .textContent=
+      "CIRCLE: "+
+      (circleOffset>0?"RIGHT":"LEFT");
+
+
+  draw();
+
+}
+
+
+function addCompleteCircleConnection(
+  plot,
+  circleMM,
+  crossMM
+){
+
+  const line=
+    document.createElement("div");
+
+  line.className="circleConnect";
+
+  /*
+     Circle center
+  */
+
+  const circleX=
+    50+circleOffsetX();
+
+  const circleY=
+    lensY(circleMM);
+
+
+  /*
+     Cross center
+  */
+
+  const crossX=50;
+
+  const crossY=
+    lensY(crossMM);
+
+
+  /*
+     Convert percentage coordinates
+     into the actual plot dimensions.
+  */
+
+  const dx=
+    (crossX-circleX)*
+    plot.clientWidth/
+    100;
+
+  const dy=
+    (crossY-circleY)*
+    plot.clientHeight/
+    100;
+
+
+  const length=
+    Math.sqrt(
+      dx*dx+
+      dy*dy
+    );
+
+
+  const angle=
+    Math.atan2(dy,dx)*
+    180/Math.PI;
+
+
+  line.style.left=
+    circleX+"%";
+
+  line.style.top=
+    circleY+"%";
+
+  line.style.width=
+    length+"px";
+
+  line.style.transform=
+    `rotate(${angle}deg)`;
+
+
+  plot.appendChild(line);
+
+}
+
+
+/* =========================================================
    DESIGN 1 MARKERS
 ========================================================= */
 
@@ -1640,28 +1827,30 @@ function addMarkers1(plot){
   circle.style.top=
     lensY(42.5)+"%";
 
+  circle.style.left=
+    `calc(50% + ${circleOffsetX()}%)`;
+
 
   plot.appendChild(circle);
 
 
   /*
-     Eye Point and red reference lines
+     Connect the CENTER of the circle
+     to the CENTER of the cross.
   */
+
+
+
 
   addEyeMarkers(plot);
 
 }
-
 
 /* =========================================================
    DESIGN 2 MARKERS
 ========================================================= */
 
 function addMarkers2(plot,corridor){
-
-  /*
-     Far circle
-  */
 
   const farCircle=
     document.createElement("div");
@@ -1676,10 +1865,6 @@ function addMarkers2(plot,corridor){
   plot.appendChild(farCircle);
 
 
-  /*
-     Cross at 20 mm
-  */
-
   const cross=
     document.createElement("div");
 
@@ -1692,10 +1877,6 @@ function addMarkers2(plot,corridor){
 
   plot.appendChild(cross);
 
-
-  /*
-     Near circle
-  */
 
   const nearStart=
     20+corridor+4.5;
@@ -1710,18 +1891,24 @@ function addMarkers2(plot,corridor){
   nearCircle.style.top=
     lensY(nearStart)+"%";
 
+  nearCircle.style.left=
+    `calc(50% + ${circleOffsetX()}%)`;
+
 
   plot.appendChild(nearCircle);
 
 
   /*
-     Eye Point and red reference lines
+     Connect the CENTER of the circle
+     to the CENTER of the cross.
   */
+
+
+
 
   addEyeMarkers(plot);
 
 }
-
 
 /* =========================================================
    DESIGN 1
