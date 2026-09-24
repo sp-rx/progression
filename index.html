@@ -718,7 +718,7 @@ function updateCorridor(value){
 <div class="eyeControls">
     <div class="eyeControl">
 
-  <label>EYE POINT HEIGHT</label>
+  <label style="margin-right:-40px">EYE POINT HEIGHT</label>
 
   <input
     type="range"
@@ -741,7 +741,7 @@ function updateCorridor(value){
       </button>
 
 
-      <label style="margin-left:100px" >FITTING POSITION</label>
+      <label style="margin-left:50px; margin-right:-40px" >FITTING POSITION</label>
 
       <input
         id="eyePointSlider"
@@ -762,6 +762,29 @@ function updateCorridor(value){
       </span>
 
 
+  <div class="eyeControl">
+
+    <label style="margin-left:50px;margin-right:-40px" >NOSEPAD POSITION</label>
+
+    <input
+      id="nosepadSlider"
+      type="range"
+      min="2"
+      max="12"
+      step="1"
+      value="7"
+      oninput="
+        nosepadPosition=parseFloat(this.value);
+        updateNosepadControl();
+        draw();
+      "
+    >
+
+    <span id="nosepadValue" class="eyeValue">
+      7 MM
+    </span>
+
+  </div>
 
  
 </div>
@@ -999,6 +1022,7 @@ let eyePoint=20;
 
 let eyePointVisible=true;
 
+let nosepadPosition=7;
 
 /*
    Eye Point:
@@ -1055,6 +1079,82 @@ function updateEyeControls(){
   updateNetFittingHeight();
 
 }
+
+
+function addNosepad(plot,plotIndex){
+
+  if(!eyePointVisible)
+    return;
+
+  const oval=document.createElement("div");
+
+  oval.style.position="absolute";
+
+  /* 2 MM WIDE × 4 MM HIGH */
+
+  oval.style.width=
+    (4/100*plot.clientHeight)+"px";
+
+  oval.style.height=
+    (8/100*plot.clientHeight)+"px";
+
+  /*
+     RED EYE POINT CIRCLE CENTER
+     IS FIXED AT 16 MM
+  */
+
+  const redCircleMM=16;
+
+  /*
+     NOSEPAD POSITION IS RELATIVE
+     TO THE RED EYE POINT CENTER
+  */
+
+  const nosepadMM=
+    redCircleMM+nosepadPosition;
+
+  /*
+     NASAL DISPLACEMENT
+
+     LEFT PLOT  = RIGHT 20%
+     RIGHT PLOT = LEFT 20%
+  */
+
+  const nasalOffset=
+    plotIndex===0 ? 20 : -20;
+
+  oval.style.left=
+    `calc(50% + ${nasalOffset}%)`;
+
+  oval.style.top=
+    y(nosepadMM)+"%";
+
+  oval.style.transform=
+    "translate(-50%,-50%)";
+
+  oval.style.border=
+    "6px solid rgba(185,74,58,0.7)";
+
+  oval.style.borderRadius="50%";
+
+  oval.style.pointerEvents="none";
+
+  oval.style.zIndex="25";
+
+  plot.appendChild(oval);
+
+}
+
+
+function updateNosepadControl(){
+
+  document.getElementById("nosepadValue")
+    .textContent=
+      Math.abs(nosepadPosition).toFixed(0)+" MM";
+
+}
+
+
 
 function updateNetFittingHeight(){
 
@@ -1977,6 +2077,8 @@ circle.style.left=
 
 plot.appendChild(circle);
 
+addNosepad(plot,plotIndex);
+
 addFittingHeightLine(plot);
 
 addEyeMarkers(plot);
@@ -2040,6 +2142,8 @@ nearCircle.style.left=
 
 
 plot.appendChild(nearCircle);
+
+addNosepad(plot,plotIndex);
 
 addFittingHeightLine(plot);
 
@@ -2433,7 +2537,7 @@ corridorInput.addEventListener(
 ========================================================= */
 
 updateEyeControls();
-
+updateNosepadControl();
 
 document.getElementById("eyePointToggle")
   .textContent=
