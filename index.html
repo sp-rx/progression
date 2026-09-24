@@ -234,11 +234,40 @@ select{
   align-items:flex-start
 }
 
-.ruler{
+.rulerWindow{
   position:relative;
   width:50px;
-  height:1200px
+  height:720px;
+  overflow:hidden;
 }
+
+.plotWindow{
+  position:relative;
+  width:680px;
+  height:720px;
+  overflow:hidden;
+}
+
+.ruler{
+  position:absolute;
+  top:-240px;
+  left:0;
+  width:50px;
+  height:1200px;
+}
+
+.plot{
+  position:absolute;
+  top:-240px;
+  left:0;
+  width:680px;
+  height:1200px;
+  overflow:visible;
+  background:#fffdf7;
+  border:1px solid #aaa296;
+  border-radius:3px;
+}
+
 
 .mm{
   position:absolute;
@@ -255,17 +284,6 @@ select{
   height:1px;
   background:#777
 }
-
-.plot{
-  position:relative;
-  width:680px;
-  height:1200px;
-  overflow:visible;
-  background:#fffdf7;
-  border:1px solid #aaa296;
-  border-radius:3px;
-}
-
 .heat{
   position:absolute;
   left:0;
@@ -531,18 +549,27 @@ input[type="range"]::-moz-range-thumb{
 
 <!-- TWO LENSES -->
 
-<div style="margin-top:-150px; margin-bottom:-180px" class="graphs">
-  <div class="graph">
+<div style="margin-top:-100px; margin-bottom:-100px" class="graphs">
+<div class="graph">
+  <div class="rulerWindow">
     <div id="ruler1" class="ruler"></div>
+  </div>
+
+  <div class="plotWindow">
     <div id="plot1" class="plot"></div>
   </div>
+</div>
 
 
-  <div class="graph">
+<div class="graph">
+  <div class="rulerWindow">
     <div id="ruler2" class="ruler"></div>
+  </div>
 
+  <div class="plotWindow">
     <div id="plot2" class="plot"></div>
   </div>
+</div>
 </div>
 
 
@@ -2083,6 +2110,7 @@ addFittingHeightLine(plot);
 
 addEyeMarkers(plot);
 
+addBoundaryLines(plot);
 }
 
 /* =========================================================
@@ -2148,6 +2176,7 @@ addNosepad(plot,plotIndex);
 addFittingHeightLine(plot);
 
 addEyeMarkers(plot);
+addBoundaryLines(plot);
 
 }
 
@@ -2323,6 +2352,27 @@ addMarkers2(
 
 }
 
+function addBoundaryLines(plot){
+
+  [20,80].forEach(mm=>{
+
+    const line=document.createElement("div");
+
+    line.style.position="absolute";
+    line.style.left="0";
+    line.style.width="100%";
+    line.style.height="6px";
+    line.style.top = `calc(${lensY(mm)}% - 255px)`;
+    line.style.background="rgba(120,120,120,0.35)";
+    line.style.pointerEvents="none";
+    line.style.zIndex="10";
+
+    plot.appendChild(line);
+
+  });
+
+}
+
 
 /* =========================================================
    RULER
@@ -2332,47 +2382,37 @@ function drawRuler(ruler){
 
   ruler.innerHTML="";
 
-
   for(
-    let mm=0;
-    mm<=100;
+    let mm=20;
+    mm<=80;
     mm++
   ){
 
     const tick=
       document.createElement("div");
 
-
     tick.className="tick";
-
 
     tick.style.top=
       mm+"%";
 
-
     if(mm%5===0)
       tick.style.width="15px";
 
-
     ruler.appendChild(tick);
 
-
-    if(mm%5===0){
+    if(mm%5===0 && mm!==20 && mm!==80){
 
       const label=
         document.createElement("div");
 
-
       label.className="mm";
-
 
       label.style.top=
         mm+"%";
 
-
       label.textContent=
         mm;
-
 
       ruler.appendChild(label);
 
