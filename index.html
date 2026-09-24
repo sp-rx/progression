@@ -861,25 +861,24 @@ input[type="range"]::-moz-range-thumb{
 
 
 
-  <label>
-    PLOT GAP
-  </label>
+<label>
+  PLOT GAP
+</label>
 
 <input
   type="range"
   id="plotGap"
-  min="-680"
-  max="300"
-  step="5"
-  value="120"
+  min="56"
+  max="72"
+  step="1"
+  value="64"
 >
 
-  <span       class="eyeValue"
+<span class="eyeValue" id="plotGapValue">
+  71 MM
+</span>
 
-    id="plotGapValue"
-  >
-    120 PX
-  </span>
+
 
   </div>
 
@@ -915,22 +914,21 @@ const plotGapValue=
 
 function updatePlotGap(){
 
-  const gap=
+  const mm=
     parseInt(plotGapInput.value)||0;
+
+  const gap=
+    120+(mm-71)*(220/8);
 
   graphs.style.setProperty(
     "--plot-gap",
     gap
   );
 
-  const realMM=
-    71 + (gap-120)*(8/220);
-
   plotGapValue.textContent=
-    realMM.toFixed(1)+" MM";
+    mm+" MM";
 
 }
-
 
 plotGapInput.addEventListener(
   "input",
