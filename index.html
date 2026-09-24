@@ -44,6 +44,7 @@ h1{
   color:#777;
 }
 
+
 .panelRow{
   display:flex;
   align-items:center;
@@ -1861,12 +1862,18 @@ function addLine(plot,mm,label){
   plot.appendChild(line);
 
 
-  /*
-     POWER LABELS HAVE BEEN REMOVED.
+  const powerLabel=
+    document.createElement("div");
 
-     The line still gets drawn,
-     but no .label element is created.
-  */
+  powerLabel.className="label";
+
+  powerLabel.style.top=
+    lensY(mm)+"%";
+
+  powerLabel.textContent=
+    label || "";
+
+  plot.appendChild(powerLabel);
 
 }
 
@@ -2219,10 +2226,11 @@ function drawDesign1(
   );
 
 
-  addLine(
-    plot,
-    10
-  );
+addLine(
+  plot,
+  10,
+  formatPower(0)
+);
 
 
   for(
@@ -2237,17 +2245,20 @@ function drawDesign1(
       );
 
 
-    addLine(
-      plot,
-      mm
-    );
+addLine(
+  plot,
+  mm,
+  formatPower(power)
+);
 
   }
 
 
   addLine(
     plot,
-    38
+    38,
+  formatPower(add)
+
   );
 
 
@@ -2306,7 +2317,9 @@ function drawDesign2(
 
   addLine(
     plot,
-    start
+    start,
+  formatPower(0)
+
   );
 
 
@@ -2325,7 +2338,9 @@ function drawDesign2(
 
     addLine(
       plot,
-      mm
+      mm,
+  formatPower(power)
+
     );
 
   }
@@ -2333,7 +2348,9 @@ function drawDesign2(
 
   addLine(
     plot,
-    end
+    end,
+  formatPower(add)
+
   );
 
 
