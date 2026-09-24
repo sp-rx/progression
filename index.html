@@ -923,8 +923,11 @@ function updatePlotGap(){
     gap
   );
 
+  const realMM=
+    71 + (gap-120)*(8/220);
+
   plotGapValue.textContent=
-    gap+" PX";
+    realMM.toFixed(1)+" MM";
 
 }
 
