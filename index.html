@@ -226,7 +226,7 @@ select{
 .graphs{
   display:flex;
   justify-content:center;
-  gap:var(--plot-gap,120px);
+  gap:0;
 }
 
 .graph{
@@ -2659,20 +2659,22 @@ let pupilDistance=64;
 
 const PD_REFERENCE=64;
 const GAP_REFERENCE=120;
+const PX_PER_MM=50;
 
 function updatePlotSpacing(){
 
-  const gap=
-    pupilDistance/PD_REFERENCE*
-    GAP_REFERENCE;
+  const gap =
+    GAP_REFERENCE +
+    (pupilDistance-PD_REFERENCE)*PX_PER_MM;
 
-  document.querySelector(".graphs")
-    .style.setProperty(
-      "--plot-gap",
-      gap+"px"
-    );
+  const graphs=document.querySelector(".graphs");
+  const graph2=graphs.children[1];
 
+  graph2.style.marginLeft=gap+"px";
 }
+
+
+
 </script>
 
 
