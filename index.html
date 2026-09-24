@@ -231,6 +231,22 @@ select{
   position:relative;
 }
 
+#graphs{
+  position:relative;
+}
+
+#graphs::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:53%;
+  width:2px;
+  background:#555;
+  z-index:30;
+  pointer-events:none;
+}
+
 .graph{
   display:flex;
   align-items:flex-start;
