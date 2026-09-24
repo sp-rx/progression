@@ -918,15 +918,7 @@ function updatePlotGap(){
   const mm=
     parseInt(plotGapInput.value)||0;
 
-  let realMM;
-
-  if(mm>=70){
-    realMM=
-      69+(mm-70)*2;
-  }else{
-    realMM=
-      60+(mm-66)*(9/4);
-  }
+  let realMM=mm;
 
   const gap=
     120+(realMM-71)*(220/8);
