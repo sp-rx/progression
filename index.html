@@ -226,7 +226,7 @@ select{
 .graphs{
   display:flex;
   justify-content:center;
-  gap:120px;
+  gap:var(--plot-gap,120px);
 }
 
 .graph{
@@ -626,6 +626,8 @@ input[type="range"]::-moz-range-thumb{
 
     </button>
 
+
+
   </div>
 
 
@@ -817,6 +819,28 @@ function updateCorridor(value){
 
     <div class="eyeControl">
 
+<div class="control" style="margin-top:12px">
+  <label>PUPIL DISTANCE</label>
+
+  <input
+    type="range"
+    id="pdSlider"
+    min="50"
+    max="80"
+    step="1"
+    value="64"
+    oninput="
+      pupilDistance=parseInt(this.value);
+      document.getElementById('pdValue').textContent=
+        pupilDistance+' MM';
+      updatePlotSpacing();
+    "
+  >
+
+  <span id="pdValue" class="sliderValue">
+    64 MM
+  </span>
+</div>
 
 
 
@@ -2604,7 +2628,12 @@ function changeScale(amount){
 
 }
 
-window.addEventListener("load",applyScale);
+window.addEventListener("load",function(){
+  updatePlotSpacing();
+  applyScale();
+  draw();
+});
+
 </script>
 
 
@@ -2624,6 +2653,26 @@ document.getElementById("fittingHeight")
     draw();
 
   });
+
+
+let pupilDistance=64;
+
+const PD_REFERENCE=64;
+const GAP_REFERENCE=120;
+
+function updatePlotSpacing(){
+
+  const gap=
+    pupilDistance/PD_REFERENCE*
+    GAP_REFERENCE;
+
+  document.querySelector(".graphs")
+    .style.setProperty(
+      "--plot-gap",
+      gap+"px"
+    );
+
+}
 </script>
 
 
