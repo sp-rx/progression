@@ -2110,7 +2110,6 @@ addFittingHeightLine(plot);
 
 addEyeMarkers(plot);
 
-addBoundaryLines(plot);
 }
 
 /* =========================================================
@@ -2176,7 +2175,6 @@ addNosepad(plot,plotIndex);
 addFittingHeightLine(plot);
 
 addEyeMarkers(plot);
-addBoundaryLines(plot);
 
 }
 
@@ -2349,27 +2347,6 @@ addMarkers2(
     end+4.5,
     "NEAR"
   );
-
-}
-
-function addBoundaryLines(plot){
-
-  [20,80].forEach(mm=>{
-
-    const line=document.createElement("div");
-
-    line.style.position="absolute";
-    line.style.left="0";
-    line.style.width="100%";
-    line.style.height="6px";
-    line.style.top = `calc(${lensY(mm)}% - 255px)`;
-    line.style.background="rgba(120,120,120,0.35)";
-    line.style.pointerEvents="none";
-    line.style.zIndex="10";
-
-    plot.appendChild(line);
-
-  });
 
 }
 
