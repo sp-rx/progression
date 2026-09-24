@@ -2605,9 +2605,6 @@ draw();
 <script>
 let pageScale=.68;
 
-document.querySelector(".app").style.transform=
-  `scale(${pageScale})`;
-
 function applyScale(){
 
   document.querySelector(".app").style.transform=
@@ -2631,9 +2628,11 @@ function changeScale(amount){
 
 }
 
-updatePlotSpacing();
-applyScale();
-draw();
+window.addEventListener("load",function(){
+  updatePlotSpacing();
+  applyScale();
+  draw();
+});
 
 </script>
 
