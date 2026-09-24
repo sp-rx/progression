@@ -226,9 +226,6 @@ select{
 .graphs{
   display:flex;
   justify-content:center;
-
-  /* CHANGED:
-     This is now controlled by the gap slider */
   gap:120px;
 }
 
@@ -243,6 +240,8 @@ select{
   height:1200px
 }
 
+
+
 .plot{
   position:relative;
   width:680px;
@@ -253,8 +252,6 @@ select{
   border-radius:3px;
 }
 
-
-/* MM RULER LABELS */
 
 .mm{
   position:absolute;
@@ -271,10 +268,6 @@ select{
   height:1px;
   background:#777
 }
-
-
-/* HEAT */
-
 .heat{
   position:absolute;
   left:0;
@@ -389,7 +382,6 @@ select{
   pointer-events:none;
 }
 
-
 /* EYE POINT */
 
 .eyeMarker{
@@ -458,11 +450,10 @@ select{
 }
 
 .stepper input[type=number]{
-  -moz-appearance:textfield;
+  -moz-appearance:textfield
 }
 
 
-/* RANGE */
 
 input[type="range"]{
   width:180px;
@@ -477,6 +468,7 @@ input[type="range"]::-webkit-slider-runnable-track{
   height:4px;
   background:#d8d1c5;
   border-radius:4px;
+
 }
 
 input[type="range"]::-webkit-slider-thumb{
@@ -484,10 +476,10 @@ input[type="range"]::-webkit-slider-thumb{
   appearance:none;
   width:16px;
   height:16px;
-  margin-top:-6px;
+  margin-top:-10px;
   border-radius:50%;
   background:#527a64;
-  border:2px solid #fffdf7;
+  border:12px solid #fffdf7;
   box-shadow:0 1px 3px rgba(0,0,0,.2);
 }
 
@@ -514,170 +506,107 @@ input[type="range"]::-moz-range-thumb{
 }
 
 
-/* =========================================================
-   PLOT GAP CONTROL
-========================================================= */
-
-.plotGapControl{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  margin-top:10px;
-  margin-bottom:20px;
-}
-
-.plotGapControl label{
-  font-size:11px;
-  color:#666;
-}
-
-.plotGapControl input[type="range"]{
-  width:180px;
-}
-
-.plotGapValue{
-  min-width:50px;
-  text-align:center;
-  font-size:12px;
-  color:#555;
-}
 
 </style>
 </head>
 
 <body>
 
+
+
+
+
+
 <h1>Multifocal Power Distribution</h1>
+
+
+
+<!-- LENS TITLES -->
+
+
+
+
+
 
 <div class="app">
 
+
 <!-- TWO LENSES -->
 
-<div
-  style="margin-top:-150px; margin-bottom:-180px"
-  class="graphs"
-  id="graphs"
->
-
+<div style="margin-top:-150px; margin-bottom:-180px" class="graphs">
   <div class="graph">
     <div id="ruler1" class="ruler"></div>
     <div id="plot1" class="plot"></div>
   </div>
 
+
   <div class="graph">
     <div id="ruler2" class="ruler"></div>
+
     <div id="plot2" class="plot"></div>
   </div>
-
-</div>
-
 </div>
 
 
-<!-- PLOT GAP CONTROL -->
-
-<div class="plotGapControl">
-
-  <label for="plotGap">
-    PLOT GAP
-  </label>
-
-  <input
-    type="range"
-    id="plotGap"
-    min="0"
-    max="300"
-    step="5"
-    value="120"
-  >
-
-  <span
-    id="plotGapValue"
-    class="plotGapValue"
-  >
-    120 PX
-  </span>
-
 </div>
-
-
-<!-- LENS TITLES -->
 
 <div
-  style="
-    margin-top:20px;
-    margin-bottom:20px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:20px
-  "
+  style="margin-top:20px; margin-bottom:20px;display:flex;justify-content:center;align-items:center;gap:20px"
   class="lensTitles"
 >
 
-  <div
-    class="toggle"
-    style="width:max-content;margin:0"
-  >
+  <div class="toggle" style="width:max-content;margin:0">
 
-    <button
-      id="officeLensMode"
+    <button       id="officeLensMode"
       class="active"
       type="button"
-    >
-      <span class="lensTitle">
-        OFFICE LENS CORRIDOR 18 MM
-      </span>
+    ><span class="lensTitle">
+      OFFICE LENS CORRIDOR 18 MM</span>
     </button>
 
     <button
       id="palLensMode"
       type="button"
+    ><span class="lensTitle">
+      PAL LENS</span>
+
+
+  <span
+    id="corridorControl"
+  >
+
+    <span  style="margin-left:5px" class="lensTitle">
+      CORRIDOR
+    </span>
+
+    <input
+      style="width:70px"
+      type="range"
+      id="corridor"
+      class="corridorSlider"
+      min="9"
+      max="15"
+      step="2"
+      value="11"
+      oninput="updateCorridor(this.value)"
     >
-      <span class="lensTitle">
-        PAL LENS
-      </span>
 
-      <span id="corridorControl">
+    <span class="lensTitle" id="corridorValue">
+      11 MM
+    </span>
 
-        <span
-          style="margin-left:5px"
-          class="lensTitle"
-        >
-          CORRIDOR
-        </span>
+  </span>
 
-        <input
-          style="width:70px"
-          type="range"
-          id="corridor"
-          class="corridorSlider"
-          min="9"
-          max="15"
-          step="2"
-          value="11"
-          oninput="updateCorridor(this.value)"
-        >
 
-        <span
-          class="lensTitle"
-          id="corridorValue"
-        >
-          11 MM
-        </span>
-
-      </span>
 
     </button>
 
   </div>
 
+
+
 </div>
-
-
 <script>
-
 function updateCorridor(value){
 
   document.getElementById("corridorValue")
@@ -686,52 +615,17 @@ function updateCorridor(value){
   draw();
 
 }
-
-
-/* =========================================================
-   PLOT GAP
-========================================================= */
-
-const plotGapInput=
-  document.getElementById("plotGap");
-
-const graphs=
-  document.getElementById("graphs");
-
-const plotGapValue=
-  document.getElementById("plotGapValue");
-
-
-function updatePlotGap(){
-
-  const gap=
-    parseInt(plotGapInput.value)||0;
-
-  graphs.style.gap=
-    gap+"px";
-
-  plotGapValue.textContent=
-    gap+" PX";
-
-}
-
-
-plotGapInput.addEventListener(
-  "input",
-  updatePlotGap
-);
-
-updatePlotGap();
-
 </script>
+
+
 
 
 <!-- PANEL 1 -->
 
+
 <div style="display:none" class="panel">
 
   <div class="control">
-
     <label>SCALE</label>
 
     <input
@@ -751,22 +645,16 @@ updatePlotGap();
 
 <div class="panel">
 
-  <div class="sectionTitle">
-    PRESCRIPTION & DISPLAY
-  </div>
+  <div class="sectionTitle">PRESCRIPTION & DISPLAY</div>
 
   <div class="panelRow">
 
     <div class="inputs">
 
       <div class="control">
+        <label for="far">FAR RX</label>
 
-        <label for="far">
-          FAR RX
-        </label>
-
-        <input
-          style="width:500px"
+        <input style="width:500px"
           id="far"
           type="range"
           min="-10"
@@ -780,18 +668,12 @@ updatePlotGap();
           "
         >
 
-        <span class="sliderValue">
-          -2.00 D
-        </span>
-
+        <span class="sliderValue">-2.00 D</span>
       </div>
 
 
       <div class="control">
-
-        <label for="add">
-          ADD
-        </label>
+        <label for="add">ADD</label>
 
         <input
           id="add"
@@ -807,10 +689,7 @@ updatePlotGap();
           "
         >
 
-        <span class="sliderValue">
-          2.00 D
-        </span>
-
+        <span class="sliderValue">2.00 D</span>
       </div>
 
     </div>
@@ -831,120 +710,115 @@ updatePlotGap();
   </div>
 
 
-<!-- EYE POINT CONTROL -->
+
+
+
+
+  <!-- EYE POINT CONTROL -->
+
 
 <div class="eyeControls">
-
-  <div class="eyeControl">
-
-    <label>
-      EYE POINT HEIGHT
-    </label>
-
-    <input
-      type="range"
-      id="fittingHeight"
-      min="16"
-      max="36"
-      step="1"
-      value="26"
-    >
-
-    <span
-      id="fittingHeightValue"
-      class="eyeValue"
-    >
-      26 MM
-    </span>
-
-
-    <label>
-      FITTING POSITION
-    </label>
-
-    <input
-      id="eyePointSlider"
-      type="range"
-      min="10"
-      max="30"
-      step="1"
-      value="20"
-      oninput="
-        eyePoint=parseInt(this.value);
-        updateEyeControls();
-        draw();
-      "
-    >
-
-    <span
-      id="eyePointValue"
-      class="eyeValue"
-    >
-      20 MM
-    </span>
-
-
     <div class="eyeControl">
 
-      <label>
-        NOSEPAD POSITION
-      </label>
+  <label>EYE POINT HEIGHT</label>
+
+  <input
+    type="range"
+    id="fittingHeight"
+    min="16"
+    max="36"
+    step="1"
+    value="26"
+  >
+
+  <span id="fittingHeightValue" class="eyeValue">26 MM</span>
+
+
+
+
+      <label>FITTING POSITION</label>
 
       <input
-        id="nosepadSlider"
+        id="eyePointSlider"
         type="range"
-        min="2"
-        max="12"
+        min="10"
+        max="30"
         step="1"
-        value="7"
+        value="20"
         oninput="
-          nosepadPosition=parseFloat(this.value);
-          updateNosepadControl();
+          eyePoint=parseInt(this.value);
+          updateEyeControls();
           draw();
         "
       >
 
-      <span
-        id="nosepadValue"
-        class="eyeValue"
-      >
-        7 MM
+      <span id="eyePointValue" class="eyeValue">
+        20 MM
       </span>
 
-    </div>
-
-  </div>
-
-</div>
-
-
-<div class="eyeControls">
 
   <div class="eyeControl">
 
-    <label>
-      FITTING HEIGHT FOR EDGING
-    </label>
+    <label>NOSEPAD POSITION</label>
 
-    <span
-      id="netFittingHeightValue"
-      class="eyeValue"
+    <input
+      id="nosepadSlider"
+      type="range"
+      min="2"
+      max="12"
+      step="1"
+      value="7"
+      oninput="
+        nosepadPosition=parseFloat(this.value);
+        updateNosepadControl();
+        draw();
+      "
     >
-      10 MM
+
+    <span id="nosepadValue" class="eyeValue">
+      7 MM
     </span>
 
   </div>
 
-  <button
-    type="button"
-    onclick="toggleEyePoint()"
-    id="eyePointToggle"
-    class="eyePointToggle"
-  >
-    EYE POINT: ON
-  </button>
-
+ 
 </div>
+</div>
+
+
+
+
+  <div class="eyeControls">
+
+    <div class="eyeControl">
+
+
+
+
+
+
+      <label>FITTING HEIGHT FOR EDGING</label>
+
+<span id="netFittingHeightValue" class="eyeValue">10 MM</span>
+
+    </div>
+
+      <button
+        type="button"
+        onclick="toggleEyePoint()"
+        id="eyePointToggle"
+        class="eyePointToggle"
+      >
+        EYE POINT: ON
+      </button>
+
+
+
+  </div>
+
+
+
+
 
 
 </div>
@@ -1008,18 +882,38 @@ updatePlotGap();
 </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
 
-let fittingHeight=26;
 
+
+
+let fittingHeight=26;
 
 function addFittingHeightLine(plot){
 
   if(!eyePointVisible)
     return;
 
-  const line=
-    document.createElement("div");
+  const line=document.createElement("div");
 
   line.style.position="absolute";
   line.style.left="0";
@@ -1029,8 +923,7 @@ function addFittingHeightLine(plot){
   line.style.top=
     (y(16)+(fittingHeight/HEIGHT*100))+"%";
 
-  line.style.transform=
-    "translateY(-50%)";
+  line.style.transform="translateY(-50%)";
 
   line.style.background=
     "repeating-linear-gradient(to right,rgba(185,74,58,0.7) 0 4px,transparent 4px 12px)";
@@ -1039,8 +932,9 @@ function addFittingHeightLine(plot){
   line.style.zIndex="18";
 
   plot.appendChild(line);
-
 }
+
+
 
 
 function setLensMode(mode){
@@ -1053,17 +947,17 @@ function setLensMode(mode){
   const pal=
     document.getElementById("palLensMode");
 
-  if(mode==="office"){
+  const corridor=
+    document.getElementById("corridorControl");
 
-    office.classList.add("active");
-    pal.classList.remove("active");
 
-  }else{
-
-    pal.classList.add("active");
-    office.classList.remove("active");
-
-  }
+if(mode==="office"){
+  office.classList.add("active");
+  pal.classList.remove("active");
+}else{
+  pal.classList.add("active");
+  office.classList.remove("active");
+}
 
   draw();
 
@@ -1086,35 +980,27 @@ document.getElementById("palLensMode")
   };
 
 
+
 /* =========================================================
    BASIC STEPPER
 ========================================================= */
 
 function stepInput(id,step){
 
-  const input=
-    document.getElementById(id);
+  const input=document.getElementById(id);
 
-  let value=
-    parseFloat(input.value)||0;
+  let value=parseFloat(input.value)||0;
 
-  value=
-    Math.round((value+step)*100)/100;
+  value=Math.round((value+step)*100)/100;
 
   if(input.min!=="")
-    value=
-      Math.max(
-        parseFloat(input.min),
-        value
-      );
+    value=Math.max(parseFloat(input.min),value);
 
-  input.value=
-    value.toFixed(2);
+  input.value=value.toFixed(2);
 
   input.dispatchEvent(
     new Event("input",{bubbles:true})
   );
-
 }
 
 
@@ -1122,11 +1008,29 @@ function stepInput(id,step){
    EYE POINT
 ========================================================= */
 
+/*
+   Eye Point is measured in mm from the top
+   of the 50 mm lens.
+
+   Starting position:
+   Eye Point = 16 mm
+
+   The eye marker itself stays FIXED.
+
+   The lens design moves relative to it.
+*/
+
 let eyePoint=20;
 
 let eyePointVisible=true;
 
 let nosepadPosition=7;
+
+/*
+   Eye Point:
+   -1 = up 1 mm
+   +1 = down 1 mm
+*/
 
 
 function toggleEyePoint(){
@@ -1147,11 +1051,14 @@ function moveEyePoint(amount){
 
   eyePoint+=amount;
 
-  eyePoint=
-    Math.max(
-      0,
-      Math.min(50,eyePoint)
-    );
+  /*
+     Keep the eye point inside the lens.
+  */
+
+  eyePoint=Math.max(
+    0,
+    Math.min(50,eyePoint)
+  );
 
   updateEyeControls();
 
@@ -1181,10 +1088,11 @@ function addNosepad(plot,plotIndex){
   if(!eyePointVisible)
     return;
 
-  const oval=
-    document.createElement("div");
+  const oval=document.createElement("div");
 
   oval.style.position="absolute";
+
+  /* 2 MM WIDE × 4 MM HIGH */
 
   oval.style.width=
     (4/100*plot.clientHeight)+"px";
@@ -1192,10 +1100,27 @@ function addNosepad(plot,plotIndex){
   oval.style.height=
     (8/100*plot.clientHeight)+"px";
 
+  /*
+     RED EYE POINT CIRCLE CENTER
+     IS FIXED AT 16 MM
+  */
+
   const redCircleMM=16;
+
+  /*
+     NOSEPAD POSITION IS RELATIVE
+     TO THE RED EYE POINT CENTER
+  */
 
   const nosepadMM=
     redCircleMM+nosepadPosition;
+
+  /*
+     NASAL DISPLACEMENT
+
+     LEFT PLOT  = RIGHT 20%
+     RIGHT PLOT = LEFT 20%
+  */
 
   const nasalOffset=
     plotIndex===0 ? 20 : -20;
@@ -1227,31 +1152,30 @@ function updateNosepadControl(){
 
   document.getElementById("nosepadValue")
     .textContent=
-      Math.abs(nosepadPosition)
-      .toFixed(0)+" MM";
+      Math.abs(nosepadPosition).toFixed(0)+" MM";
 
 }
 
 
+
 function updateNetFittingHeight(){
 
-  const eyePoint=
+  const eyePoint =
     parseFloat(
       document.getElementById("eyePointValue").textContent
-    )||0;
+    ) || 0;
 
-  const fittingPosition=
+  const fittingPosition =
     parseFloat(
       document.getElementById("fittingHeightValue").textContent
-    )||0;
+    ) || 0;
 
-  const net=
-    eyePoint+fittingPosition;
+  const net =
+    eyePoint + fittingPosition;
 
   document.getElementById("netFittingHeightValue")
-    .textContent=
+    .textContent =
       net.toFixed(0)+" MM";
-
 }
 
 
@@ -1303,7 +1227,6 @@ const rulers=[
 
 ];
 
-
 let mode="add";
 
 let heatMode="selected";
@@ -1312,27 +1235,32 @@ let lensMode="office";
 
 
 const HEIGHT=100;
-
 const OFFSET=25;
 
-
 function y(mm){
-
   return (mm+OFFSET)/HEIGHT*100;
-
 }
 
-
 function h(mm){
-
   return mm/HEIGHT*100;
-
 }
 
 
 /* =========================================================
    LENS POSITION
 ========================================================= */
+
+/*
+   The eye marker is permanently fixed at
+   the original 16 mm position.
+
+   When Eye Point changes, the entire lens
+   design moves in the opposite direction.
+
+   Eye Point 16 mm = original position
+   Eye Point 20 mm = lens moves up 4 mm
+   Eye Point 12 mm = lens moves down 4 mm
+*/
 
 function lensY(mm){
 
@@ -1347,6 +1275,12 @@ function lensY(mm){
    DESIGN 1
 ========================================================= */
 
+/*
+   10 mm = 0%
+   20 mm = 12%
+   38 mm = 100%
+*/
+
 function percent1(mm){
 
   if(mm<=10)
@@ -1359,7 +1293,6 @@ function percent1(mm){
     return 12+(mm-20)/18*88;
 
   return 100;
-
 }
 
 
@@ -1381,8 +1314,7 @@ function percent2(mm,corridor){
 
   const start=20;
 
-  const end=
-    start+corridor;
+  const end=start+corridor;
 
   if(mm<=start)
     return 0;
@@ -1391,7 +1323,6 @@ function percent2(mm,corridor){
     return (mm-start)/corridor*100;
 
   return 100;
-
 }
 
 
@@ -1408,11 +1339,9 @@ function mmAtPercent2(p,corridor){
 
 function formatPower(v){
 
-  const n=
-    Math.round(v*100)/100;
+  const n=Math.round(v*100)/100;
 
-  return (n>0?"+":"")+
-    n.toFixed(2)+" D";
+  return (n>0?"+":"")+n.toFixed(2)+" D";
 
 }
 
@@ -1426,62 +1355,54 @@ function heatColor(power,reference){
   if(power<=0)
     return "#fffdf7";
 
-  const t=
-    Math.max(
-      0,
-      Math.min(
-        1,
-        reference>0
-          ?power/reference
-          :0
-      )
-    );
+
+  const t=Math.max(
+    0,
+    Math.min(
+      1,
+      reference>0 ? power/reference : 0
+    )
+  );
 
 
-  const stops=[
+  /*
+     WHITE
+       ↓
+     PALE GREEN
+       ↓
+     GREEN
+       ↓
+     YELLOW
+       ↓
+     ORANGE
+       ↓
+     RED
+  */
 
-    {p:0.00,c:[255,253,247]},
+const stops=[
 
-    {p:0.15,c:[250,248,225]},
+  {p:0.00,c:[255,253,247]},  // white
+  {p:0.15,c:[250,248,225]},  // very pale yellow
+  {p:0.30,c:[246,241,198]},  // pale yellow
+  {p:0.45,c:[232,231,180]},  // yellow-green
+  {p:0.60,c:[211,222,177]},  // light green
+  {p:0.75,c:[190,210,174]},  // soft green
+  {p:0.88,c:[173,201,169]},  // pale green
+  {p:1.00,c:[158,193,165]}   // light green
 
-    {p:0.30,c:[246,241,198]},
-
-    {p:0.45,c:[232,231,180]},
-
-    {p:0.60,c:[211,222,177]},
-
-    {p:0.75,c:[190,210,174]},
-
-    {p:0.88,c:[173,201,169]},
-
-    {p:1.00,c:[158,193,165]}
-
-  ];
+];
 
 
-  let lower=
-    stops[0];
-
-  let upper=
-    stops[stops.length-1];
+  let lower=stops[0];
+  let upper=stops[stops.length-1];
 
 
-  for(
-    let i=0;
-    i<stops.length-1;
-    i++
-  ){
+  for(let i=0;i<stops.length-1;i++){
 
-    if(
-      t>=stops[i].p &&
-      t<=stops[i+1].p
-    ){
+    if(t>=stops[i].p && t<=stops[i+1].p){
 
-      lower=
-        stops[i];
-
-      upper=
-        stops[i+1];
+      lower=stops[i];
+      upper=stops[i+1];
 
       break;
 
@@ -1525,28 +1446,23 @@ function heatColor(power,reference){
 
 }
 
-
 /* =========================================================
    DARKEN
 ========================================================= */
 
 function darkenColor(color,amount=.25){
 
-  const match=
-    color.match(/\d+/g);
+  const match=color.match(/\d+/g);
 
   if(!match)
     return color;
 
 
-  const r=
-    parseInt(match[0]);
+  const r=parseInt(match[0]);
 
-  const g=
-    parseInt(match[1]);
+  const g=parseInt(match[1]);
 
-  const b=
-    parseInt(match[2]);
+  const b=parseInt(match[2]);
 
 
   return `rgb(
@@ -1563,21 +1479,16 @@ function darkenColor(color,amount=.25){
 ========================================================= */
 
 function drawHeat1(plot,add){
-
-  const heatClip=
-    document.createElement("div");
-
+  const heatClip=document.createElement("div");
   heatClip.className="heatClip";
-
   plot.appendChild(heatClip);
-
 
   const reference=
     heatMode==="relative"
       ?add
       :Math.max(
           .25,
-          (parseFloat(selectedAddInput.value)||.25)+.25
+  (parseFloat(selectedAddInput.value)||.25)+.25
         );
 
 
@@ -1593,12 +1504,16 @@ function drawHeat1(plot,add){
     let next=mm+.25;
 
 
+    /* FAR */
+
     if(mm<10){
 
       regionPower=0;
 
       next=10;
 
+
+    /* PROGRESSION */
 
     }else if(mm<38){
 
@@ -1622,15 +1537,11 @@ function drawHeat1(plot,add){
           );
 
 
-        if(
-          boundary>mm &&
-          boundary<38
-        )
+        if(boundary>mm && boundary<38)
           next=boundary;
 
 
-        regionPower=
-          nextPower;
+        regionPower=nextPower;
 
 
       }else{
@@ -1642,13 +1553,15 @@ function drawHeat1(plot,add){
       }
 
 
+    /* ADD / NEAR */
+
     }else{
 
-      const topPower=
-        Math.min(
-          reference,
-          Math.floor(add/.25)*.25+.25
-        );
+const topPower=
+  Math.min(
+    reference,
+    Math.floor(add/.25)*.25 + .25
+  );
 
 
       const topColor=
@@ -1666,12 +1579,12 @@ function drawHeat1(plot,add){
 
 
       next=100;
-
     }
 
 
     const slice=
       document.createElement("div");
+
 
     slice.className="heat";
 
@@ -1700,7 +1613,7 @@ function drawHeat1(plot,add){
     }
 
 
-    heatClip.appendChild(slice);
+heatClip.appendChild(slice);
 
     mm=next;
 
@@ -1714,28 +1627,22 @@ function drawHeat1(plot,add){
 ========================================================= */
 
 function drawHeat2(plot,add,corridor){
-
-  const heatClip=
-    document.createElement("div");
-
+  const heatClip=document.createElement("div");
   heatClip.className="heatClip";
-
   plot.appendChild(heatClip);
-
 
   const reference=
     heatMode==="relative"
       ?add
       :Math.max(
           .25,
-          (parseFloat(selectedAddInput.value)||.25)+.25
+  (parseFloat(selectedAddInput.value)||.25)+.25
         );
 
 
   const start=20;
 
-  const end=
-    start+corridor;
+  const end=start+corridor;
 
 
   let mm=0;
@@ -1750,12 +1657,16 @@ function drawHeat2(plot,add,corridor){
     let next=mm+.25;
 
 
+    /* FAR */
+
     if(mm<start){
 
       regionPower=0;
 
       next=start;
 
+
+    /* PROGRESSION */
 
     }else if(mm<end){
 
@@ -1780,15 +1691,11 @@ function drawHeat2(plot,add,corridor){
           );
 
 
-        if(
-          boundary>mm &&
-          boundary<end
-        )
+        if(boundary>mm && boundary<end)
           next=boundary;
 
 
-        regionPower=
-          nextPower;
+        regionPower=nextPower;
 
 
       }else{
@@ -1800,13 +1707,15 @@ function drawHeat2(plot,add,corridor){
       }
 
 
+    /* ADD / NEAR */
+
     }else{
 
-      const topPower=
-        Math.min(
-          reference,
-          Math.floor(add/.25)*.25+.25
-        );
+const topPower=
+  Math.min(
+    reference,
+    Math.floor(add/.25)*.25 + .25
+  );
 
 
       const topColor=
@@ -1824,12 +1733,12 @@ function drawHeat2(plot,add,corridor){
 
 
       next=100;
-
     }
 
 
     const slice=
       document.createElement("div");
+
 
     slice.className="heat";
 
@@ -1858,7 +1767,7 @@ function drawHeat2(plot,add,corridor){
     }
 
 
-    heatClip.appendChild(slice);
+heatClip.appendChild(slice);
 
     mm=next;
 
@@ -1876,20 +1785,35 @@ function addLine(plot,mm,label){
   const line=
     document.createElement("div");
 
+
   line.className="line";
 
   line.style.top=
     lensY(mm)+"%";
 
+
   plot.appendChild(line);
 
 
-  /*
-     POWER LABELS HAVE BEEN REMOVED.
+  if(label){
 
-     The line still gets drawn,
-     but no .label element is created.
-  */
+    const text=
+      document.createElement("div");
+
+
+    text.className="label";
+
+    text.style.top=
+      lensY(mm)+"%";
+
+
+    text.textContent=
+      label;
+
+
+    plot.appendChild(text);
+
+  }
 
 }
 
@@ -1903,13 +1827,16 @@ function addZoneLabel(plot,mm,text){
   const label=
     document.createElement("div");
 
+
   label.className="zoneLabel";
 
   label.style.top=
     lensY(mm)+"%";
 
+
   label.textContent=
     text;
+
 
   plot.appendChild(label);
 
@@ -1925,6 +1852,7 @@ function addEyeMarker(plot,mm){
   if(!eyePointVisible)
     return;
 
+
   if(mm<0 || mm>50)
     return;
 
@@ -1932,11 +1860,20 @@ function addEyeMarker(plot,mm){
   const eye=
     document.createElement("div");
 
+
   eye.className="eyeMarker";
 
 
+  /*
+     Eye marker NEVER moves.
+
+     It is permanently positioned at the
+     original 16 mm location.
+  */
+
   eye.style.top=
     y(16)+"%";
+
 
   plot.appendChild(eye);
 
@@ -1949,85 +1886,66 @@ function addEyeMarkers(plot){
     return;
 
 
+  /*
+     Eye Point
+  */
+
   addEyeMarker(
     plot,
     eyePoint
   );
 
 
-  [16,18,20].forEach(offset=>{
+  /*
+     Red reference lines:
+     16, 18 and 20 mm BELOW Eye Point.
 
-    const mm=
-      eyePoint+offset;
+     These remain fixed relative to the
+     permanent eye marker.
+  */
 
+[16,18,20].forEach(offset=>{
 
-    const lineLeft=
-      document.createElement("div");
+  const mm = eyePoint + offset;
 
-    lineLeft.style.position=
-      "absolute";
+  const lineLeft = document.createElement("div");
 
-    lineLeft.style.left=
-      "calc(50% - 54px)";
+  lineLeft.style.position = "absolute";
+  lineLeft.style.left = "calc(50% - 54px)";
+  lineLeft.style.width = "48px";
+  lineLeft.style.height = "3px";
+  lineLeft.style.top = lensY(mm) + "%";
+  lineLeft.style.background = "rgba(185,74,58,0.7)";
+  lineLeft.style.pointerEvents = "none";
+  lineLeft.style.zIndex = "20";
 
-    lineLeft.style.width=
-      "48px";
-
-    lineLeft.style.height=
-      "3px";
-
-    lineLeft.style.top=
-      lensY(mm)+"%";
-
-    lineLeft.style.background=
-      "rgba(185,74,58,0.7)";
-
-    lineLeft.style.pointerEvents=
-      "none";
-
-    lineLeft.style.zIndex=
-      "20";
-
-    plot.appendChild(lineLeft);
+  plot.appendChild(lineLeft);
 
 
-    const lineRight=
-      document.createElement("div");
+  const lineRight = document.createElement("div");
 
-    lineRight.style.position=
-      "absolute";
+  lineRight.style.position = "absolute";
+  lineRight.style.left = "calc(50% + 6px)";
+  lineRight.style.width = "48px";
+  lineRight.style.height = "3px";
+  lineRight.style.top = lensY(mm) + "%";
+  lineRight.style.background = "rgba(185,74,58,0.7)";
+  lineRight.style.pointerEvents = "none";
+  lineRight.style.zIndex = "20";
 
-    lineRight.style.left=
-      "calc(50% + 6px)";
+  plot.appendChild(lineRight);
 
-    lineRight.style.width=
-      "48px";
-
-    lineRight.style.height=
-      "3px";
-
-    lineRight.style.top=
-      lensY(mm)+"%";
-
-    lineRight.style.background=
-      "rgba(185,74,58,0.7)";
-
-    lineRight.style.pointerEvents=
-      "none";
-
-    lineRight.style.zIndex=
-      "20";
-
-    plot.appendChild(lineRight);
-
-  });
+});
 
 }
 
 
 /* =========================================================
-   COMPLETE CIRCLE CONNECTION
+   COMPLETE CIRCLE OFFSET
 ========================================================= */
+
+
+
 
 function addCompleteCircleConnection(
   plot,
@@ -2040,6 +1958,9 @@ function addCompleteCircleConnection(
 
   line.className="circleConnect";
 
+  /*
+     Circle center
+  */
 
   const circleX=
     50+circleOffsetX();
@@ -2048,11 +1969,20 @@ function addCompleteCircleConnection(
     lensY(circleMM);
 
 
+  /*
+     Cross center
+  */
+
   const crossX=50;
 
   const crossY=
     lensY(crossMM);
 
+
+  /*
+     Convert percentage coordinates
+     into the actual plot dimensions.
+  */
 
   const dx=
     (crossX-circleX)*
@@ -2104,10 +2034,12 @@ function addMarkers1(plot,plotIndex){
   const c=
     document.createElement("div");
 
+
   c.className="cMarker";
 
   c.style.top=
     lensY(10)+"%";
+
 
   plot.appendChild(c);
 
@@ -2115,10 +2047,12 @@ function addMarkers1(plot,plotIndex){
   const cross=
     document.createElement("div");
 
+
   cross.className="crossMarker";
 
   cross.style.top=
     lensY(20)+"%";
+
 
   plot.appendChild(cross);
 
@@ -2126,31 +2060,32 @@ function addMarkers1(plot,plotIndex){
   const circle=
     document.createElement("div");
 
+
   circle.className="completeCircle";
 
   circle.style.top=
     lensY(42.5)+"%";
 
-  circle.style.left=
-    `calc(50% + ${
-      plotIndex===0?30.6:-30.6
-    }px)`;
+circle.style.left=
+  `calc(50% + ${plotIndex===0?30.6:-30.6}px)`;
 
 
-  plot.appendChild(circle);
+
+  /*
+     Connect the CENTER of the circle
+     to the CENTER of the cross.
+  */
 
 
-  addNosepad(
-    plot,
-    plotIndex
-  );
+plot.appendChild(circle);
 
-  addFittingHeightLine(plot);
+addNosepad(plot,plotIndex);
 
-  addEyeMarkers(plot);
+addFittingHeightLine(plot);
+
+addEyeMarkers(plot);
 
 }
-
 
 /* =========================================================
    DESIGN 2 MARKERS
@@ -2161,10 +2096,12 @@ function addMarkers2(plot,corridor,plotIndex){
   const farCircle=
     document.createElement("div");
 
+
   farCircle.className="cMarker";
 
   farCircle.style.top=
     lensY(16)+"%";
+
 
   plot.appendChild(farCircle);
 
@@ -2172,10 +2109,12 @@ function addMarkers2(plot,corridor,plotIndex){
   const cross=
     document.createElement("div");
 
+
   cross.className="crossMarker";
 
   cross.style.top=
     lensY(20)+"%";
+
 
   plot.appendChild(cross);
 
@@ -2187,45 +2126,42 @@ function addMarkers2(plot,corridor,plotIndex){
   const nearCircle=
     document.createElement("div");
 
-  nearCircle.className=
-    "completeCircle";
+
+  nearCircle.className="completeCircle";
 
   nearCircle.style.top=
     lensY(nearStart)+"%";
 
-  nearCircle.style.left=
-    `calc(50% + ${
-      plotIndex===0?30.6:-30.6
-    }px)`;
+nearCircle.style.left=
+  `calc(50% + ${plotIndex===0?30.6:-30.6}px)`;
 
 
-  plot.appendChild(nearCircle);
+
+  /*
+     Connect the CENTER of the circle
+     to the CENTER of the cross.
+  */
 
 
-  addNosepad(
-    plot,
-    plotIndex
-  );
+plot.appendChild(nearCircle);
 
-  addFittingHeightLine(plot);
+addNosepad(plot,plotIndex);
 
-  addEyeMarkers(plot);
+addFittingHeightLine(plot);
+
+addEyeMarkers(plot);
 
 }
-
 
 /* =========================================================
    DESIGN 1
 ========================================================= */
 
-function drawDesign1(
-  far,
-  add,
-  plotIndex=0
-){
 
-  const plot=
-    plots[plotIndex];
+function drawDesign1(far,add,plotIndex=0){
+
+  const plot=plots[plotIndex];
+
 
   plot.innerHTML="";
 
@@ -2236,15 +2172,18 @@ function drawDesign1(
   );
 
 
-  addMarkers1(
-    plot,
-    plotIndex
-  );
+addMarkers1(
+  plot,
+  plotIndex
+);
 
 
   addLine(
     plot,
-    10
+    10,
+    mode==="add"
+      ?"0.00 D"
+      :formatPower(far)
   );
 
 
@@ -2262,7 +2201,10 @@ function drawDesign1(
 
     addLine(
       plot,
-      mm
+      mm,
+      mode==="add"
+        ?formatPower(power)
+        :formatPower(far+power)
     );
 
   }
@@ -2270,7 +2212,10 @@ function drawDesign1(
 
   addLine(
     plot,
-    38
+    38,
+    mode==="add"
+      ?formatPower(add)
+      :formatPower(far+add)
   );
 
 
@@ -2294,15 +2239,11 @@ function drawDesign1(
    DESIGN 2
 ========================================================= */
 
-function drawDesign2(
-  far,
-  add,
-  corridor,
-  plotIndex=0
-){
 
-  const plot=
-    plots[plotIndex];
+function drawDesign2(far,add,corridor,plotIndex=0){
+
+  const plot=plots[plotIndex];
+
 
   plot.innerHTML="";
 
@@ -2320,16 +2261,19 @@ function drawDesign2(
   );
 
 
-  addMarkers2(
-    plot,
-    corridor,
-    plotIndex
-  );
+addMarkers2(
+  plot,
+  corridor,
+  plotIndex
+);
 
 
   addLine(
     plot,
-    start
+    start,
+    mode==="add"
+      ?"0.00 D"
+      :formatPower(far)
   );
 
 
@@ -2348,7 +2292,10 @@ function drawDesign2(
 
     addLine(
       plot,
-      mm
+      mm,
+      mode==="add"
+        ?formatPower(power)
+        :formatPower(far+power)
     );
 
   }
@@ -2356,7 +2303,10 @@ function drawDesign2(
 
   addLine(
     plot,
-    end
+    end,
+    mode==="add"
+      ?formatPower(add)
+      :formatPower(far+add)
   );
 
 
@@ -2380,7 +2330,7 @@ function drawDesign2(
    RULER
 ========================================================= */
 
-function drawRuler(ruler,showLabels){
+function drawRuler(ruler){
 
   ruler.innerHTML="";
 
@@ -2394,7 +2344,9 @@ function drawRuler(ruler,showLabels){
     const tick=
       document.createElement("div");
 
+
     tick.className="tick";
+
 
     tick.style.top=
       mm+"%";
@@ -2407,28 +2359,22 @@ function drawRuler(ruler,showLabels){
     ruler.appendChild(tick);
 
 
-    /*
-       MM LABELS:
-       Only show on the LEFT ruler.
-
-       Right ruler has ticks only.
-    */
-
-    if(
-      mm%5===0 &&
-      showLabels
-    ){
+    if(mm%5===0){
 
       const label=
         document.createElement("div");
 
+
       label.className="mm";
+
 
       label.style.top=
         mm+"%";
 
+
       label.textContent=
         mm;
+
 
       ruler.appendChild(label);
 
@@ -2448,19 +2394,14 @@ function draw(){
   const far=
     parseFloat(farInput.value)||0;
 
-
   const add=
     Math.max(
       .25,
       parseFloat(addInput.value)||.25
     );
 
-
   const corridor=
-    parseInt(
-      corridorInput.value
-    );
-
+    parseInt(corridorInput.value);
 
   if(lensMode==="office"){
 
@@ -2505,9 +2446,11 @@ addMode.onclick=()=>{
 
   mode="add";
 
+
   addMode.classList.add("active");
 
   finalMode.classList.remove("active");
+
 
   draw();
 
@@ -2518,9 +2461,11 @@ finalMode.onclick=()=>{
 
   mode="final";
 
+
   finalMode.classList.add("active");
 
   addMode.classList.remove("active");
+
 
   draw();
 
@@ -2535,9 +2480,11 @@ relativeMode.onclick=()=>{
 
   heatMode="relative";
 
+
   relativeMode.classList.add("active");
 
   selectedMode.classList.remove("active");
+
 
   draw();
 
@@ -2548,9 +2495,11 @@ selectedMode.onclick=()=>{
 
   heatMode="selected";
 
+
   selectedMode.classList.add("active");
 
   relativeMode.classList.remove("active");
+
 
   draw();
 
@@ -2590,9 +2539,7 @@ corridorInput.addEventListener(
 ========================================================= */
 
 updateEyeControls();
-
 updateNosepadControl();
-
 
 document.getElementById("eyePointToggle")
   .textContent=
@@ -2600,22 +2547,13 @@ document.getElementById("eyePointToggle")
     (eyePointVisible?"ON":"OFF");
 
 
-/*
-   LEFT RULER:
-   Show MM labels.
-
-   RIGHT RULER:
-   Ticks only — no MM labels.
-*/
-
 drawRuler(
-  rulers[0],
-  true
+  rulers[0]
 );
 
+
 drawRuler(
-  rulers[1],
-  false
+  rulers[1]
 );
 
 
@@ -2624,68 +2562,56 @@ draw();
 </script>
 
 
+
 <script>
-
 let pageScale=.68;
-
 
 function applyScale(){
 
   document.querySelector(".app").style.transform=
     `scale(${pageScale})`;
 
-}
+  document.getElementById("scaleValue").value=
+    Math.round((pageScale/.68)*100)+"%";
 
+}
 
 function changeScale(amount){
 
   pageScale+=amount;
 
-  pageScale=
-    Math.max(
-      .2,
-      Math.min(.9,pageScale)
-    );
+  pageScale=Math.max(
+    .2,
+    Math.min(.9,pageScale)
+  );
 
   applyScale();
 
 }
 
-
-window.addEventListener(
-  "load",
-  applyScale
-);
-
+window.addEventListener("load",applyScale);
 </script>
 
 
 <script>
-
 document.getElementById("fittingHeight")
-  .addEventListener(
-    "input",
-    function(){
+  .addEventListener("input",function(){
 
-      fittingHeight=
-        parseFloat(this.value);
+    fittingHeight=
+      parseFloat(this.value);
 
-
-      document.getElementById(
-        "fittingHeightValue"
-      )
+    document.getElementById("fittingHeightValue")
       .textContent=
         fittingHeight+" MM";
 
+    updateNetFittingHeight();
 
-      updateNetFittingHeight();
+    draw();
 
-      draw();
-
-    }
-  );
-
+  });
 </script>
+
+
 
 </body>
 </html>
