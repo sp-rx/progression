@@ -534,6 +534,40 @@ input[type="range"]::-moz-range-thumb{
   text-align:center;
 }
 
+.colorLegend{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-left:20px;
+}
+
+.colorLegendBar{
+  width:380px;
+  height:24px;
+  border-radius:3px;
+background:linear-gradient(
+  to right,
+  #fffdf7 0%,
+  #fffdf7 10%,
+
+  #faf8e1 20%,
+  #f6f1c6 32%,
+  #e8e7b4 44%,
+  #d3deb1 56%,
+  #bed2ae 68%,
+  #adc9a9 80%,
+
+  #9ec1a5 90%,
+  #9ec1a5 100%
+);
+  border:1px solid #d5cec2;
+}
+
+.colorLegendLabel{
+  font-size:10px;
+  color:#777;
+}
+
 
 </style>
 </head>
@@ -983,6 +1017,18 @@ updatePlotGap();
         </span>
 
       </div>
+
+<div class="colorLegend">
+
+  <span class="colorLegendLabel">0%</span>
+
+  <div class="colorLegendBar"></div>
+
+  <span class="colorLegendLabel">100%</span>
+
+</div>
+
+
 
     </div>
 
@@ -1957,7 +2003,7 @@ function addEyeMarkers(plot){
   );
 
 
-  [16,18,20].forEach(offset=>{
+[15,17,19].forEach(offset=>{
 
     const mm=
       eyePoint+offset;
@@ -1990,8 +2036,6 @@ function addEyeMarkers(plot){
     lineLeft.style.zIndex=
       "20";
 
-    plot.appendChild(lineLeft);
-
 
     const lineRight=
       document.createElement("div");
@@ -2020,7 +2064,21 @@ function addEyeMarkers(plot){
     lineRight.style.zIndex=
       "20";
 
-    plot.appendChild(lineRight);
+
+    /*
+      LEFT PLOT  → lineRight
+      RIGHT PLOT → lineLeft
+    */
+
+    if(plot === plots[0]){
+
+      plot.appendChild(lineRight);
+
+    }else{
+
+      plot.appendChild(lineLeft);
+
+    }
 
   });
 
