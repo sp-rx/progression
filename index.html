@@ -23,30 +23,28 @@ body{
   inset:0;
   width:100vw;
   height:100vh;
-  background:#f5f1e8;
+  background:#fff;
   z-index:999999;
   display:flex;
   align-items:center;
   justify-content:center;
   opacity:1;
-  animation:introFade 2s ease 0.5s forwards;
-  pointer-events:auto;
+  animation:introFade 0.5s ease 0.5s forwards;
 }
 
 #introOverlayTitle{
-  font-size:18px;
+  font-family:Arial,sans-serif;
+  font-size:28px;
+  font-weight:400;
   color:#333;
 }
 
 @keyframes introFade{
-  0%{
-    opacity:1;
-  }
-
-  100%{
+  from{opacity:1}
+  to{
     opacity:0;
-    pointer-events:none;
     visibility:hidden;
+    pointer-events:none;
   }
 }
 
@@ -2737,12 +2735,14 @@ draw();
 
 let pageScale=.672;
 
+
 function applyScale(){
 
   document.querySelector(".app").style.transform=
     `scale(${pageScale})`;
 
 }
+
 
 function changeScale(amount){
 
@@ -2758,7 +2758,11 @@ function changeScale(amount){
 
 }
 
-applyScale();
+
+window.addEventListener(
+  "load",
+  applyScale
+);
 
 </script>
 
