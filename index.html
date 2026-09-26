@@ -16,6 +16,41 @@ body{
   font-family:Arial,sans-serif;
 }
 
+/* INTRO OVERLAY */
+
+#introOverlay{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  background:#f5f1e8;
+  z-index:999999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:1;
+  animation:introFade 2s ease 0.5s forwards;
+  pointer-events:auto;
+}
+
+#introOverlayTitle{
+  font-size:18px;
+  color:#333;
+}
+
+@keyframes introFade{
+  0%{
+    opacity:1;
+  }
+
+  100%{
+    opacity:0;
+    pointer-events:none;
+    visibility:hidden;
+  }
+}
+
+
 .app{
   width:100%;
   max-width:900px;
@@ -574,14 +609,18 @@ background:linear-gradient(
 </head>
 
 <body>
-
+<div id="introOverlay">
+  <div id="introOverlayTitle">
+    <i>Loading..</i>
+  </div>
+</div>
 
 <div class="app">
 
 <!-- TWO LENSES -->
 
 <div
-  style="margin-top:-220px; margin-bottom:-180px"
+  style="margin-top:-200px; margin-bottom:-180px"
   class="graphs"
   id="graphs"
 >
@@ -2696,7 +2735,7 @@ draw();
 
 <script>
 
-let pageScale=.68;
+let pageScale=.672;
 
 
 function applyScale(){
