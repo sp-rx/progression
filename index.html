@@ -960,6 +960,59 @@ background:linear-gradient(
 
 </div>
 
+
+
+
+
+<script>
+
+let pageScale=.672;
+
+
+function applyScale(){
+
+  document.querySelector(".app").style.transform=
+    `scale(${pageScale})`;
+
+}
+
+
+function changeScale(amount){
+
+  pageScale+=amount;
+
+  pageScale=
+    Math.max(
+      .2,
+      Math.min(.9,pageScale)
+    );
+
+  applyScale();
+
+}
+
+
+window.addEventListener(
+  "load",
+  () => {
+    setTimeout(
+      () => {
+        applyScale();
+        document.querySelector(".app").style.visibility="visible";
+      },
+      1000
+    );
+  }
+);
+
+</script>
+
+
+
+
+
+
+
 <script>
 
 function updateCorridor(value){
@@ -2733,48 +2786,7 @@ draw();
 </script>
 
 
-<script>
 
-let pageScale=.672;
-
-
-function applyScale(){
-
-  document.querySelector(".app").style.transform=
-    `scale(${pageScale})`;
-
-}
-
-
-function changeScale(amount){
-
-  pageScale+=amount;
-
-  pageScale=
-    Math.max(
-      .2,
-      Math.min(.9,pageScale)
-    );
-
-  applyScale();
-
-}
-
-
-window.addEventListener(
-  "load",
-  () => {
-    setTimeout(
-      () => {
-        applyScale();
-        document.querySelector(".app").style.visibility="visible";
-      },
-      1000
-    );
-  }
-);
-
-</script>
 
 
 <script>
