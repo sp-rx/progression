@@ -29,7 +29,7 @@ body{
   align-items:center;
   justify-content:center;
   opacity:1;
-  animation:introFade 2s ease 2s forwards;
+  animation:introFade 0.5s ease 0.5s forwards;
 }
 
 #introOverlayTitle{
@@ -2761,7 +2761,12 @@ function changeScale(amount){
 
 window.addEventListener(
   "load",
-  applyScale
+  () => {
+    setTimeout(
+      applyScale,
+      1000
+    );
+  }
 );
 
 </script>
