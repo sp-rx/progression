@@ -187,10 +187,11 @@ select{
 }
 
 .eyeValue{
-  min-width:48px;
+  min-width:24px;
   text-align:center;
-  font-size:12px;
+  font-size:11px;
   color:#555;
+  margin-left:-3px;
 }
 
 
@@ -486,7 +487,7 @@ select{
 /* RANGE */
 
 input[type="range"]{
-  width:180px;
+  width:200px;
   height:6px;
   padding:0;
   border:0;
@@ -791,7 +792,12 @@ background:linear-gradient(
     <label>
       EYE POINT HEIGHT
     </label>
-
+    <span
+      id="fittingHeightValue"
+      class="eyeValue"
+    >
+      26 MM
+    </span>
     <input
       type="range"
       id="fittingHeight"
@@ -801,18 +807,18 @@ background:linear-gradient(
       value="26"
     >
 
-    <span
-      id="fittingHeightValue"
-      class="eyeValue"
-    >
-      26 MM
-    </span>
+
 
 
     <label>
       FITTING POSITION
     </label>
-
+   <span
+      id="eyePointValue"
+      class="eyeValue"
+    >
+      20 MM
+    </span>
     <input
       id="eyePointSlider"
       type="range"
@@ -827,12 +833,7 @@ background:linear-gradient(
       "
     >
 
-    <span
-      id="eyePointValue"
-      class="eyeValue"
-    >
-      20 MM
-    </span>
+ 
 
 
     <div class="eyeControl">
@@ -840,7 +841,12 @@ background:linear-gradient(
       <label>
         NOSEPAD POSITION
       </label>
-
+      <span
+        id="nosepadValue"
+        class="eyeValue"
+      >
+        7 MM
+      </span>
       <input
         id="nosepadSlider"
         type="range"
@@ -855,12 +861,7 @@ background:linear-gradient(
         "
       >
 
-      <span
-        id="nosepadValue"
-        class="eyeValue"
-      >
-        7 MM
-      </span>
+
 
     </div>
 
@@ -899,7 +900,9 @@ background:linear-gradient(
 <label>
   PUPIL DISTANCE
 </label>
-
+<span class="eyeValue" id="plotGapValue">
+  71 MM
+</span>
 <input
   type="range"
   id="plotGap"
@@ -909,9 +912,7 @@ background:linear-gradient(
   value="70"
 >
 
-<span class="eyeValue" id="plotGapValue">
-  71 MM
-</span>
+
 
 
 
