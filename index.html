@@ -741,10 +741,6 @@ background:linear-gradient(
 
 <div class="panel">
 
-  <div class="sectionTitle">
-    PRESCRIPTION & DISPLAY
-  </div>
-
   <div class="panelRow">
 
     <div class="inputs">
@@ -830,70 +826,80 @@ background:linear-gradient(
 
 
 <!-- EYE POINT CONTROL -->
+
 <div class="panel">
 
-<div class="inputs">
-
-  <div class="eyeControl">
-
-    <label>
-      EYE POINT HEIGHT
-    </label>
-    <span
-      id="fittingHeightValue"
-      class="eyeValue"
-    >
-      26 MM
-    </span>
-    <input
-      type="range"
-      id="fittingHeight"
-      min="16"
-      max="36"
-      step="1"
-      value="26"
-    >
-
-
-
-
-    <label>
-      FITTING POSITION
-    </label>
-   <span
-      id="eyePointValue"
-      class="eyeValue"
-    >
-      20 MM
-    </span>
-    <input
-      id="eyePointSlider"
-      type="range"
-      min="10"
-      max="30"
-      step="1"
-      value="20"
-      oninput="
-        eyePoint=parseInt(this.value);
-        updateEyeControls();
-        draw();
-      "
-    >
-
- 
-
+  <div class="inputs">
 
     <div class="eyeControl">
 
       <label>
+        EYE POINT HEIGHT
+      </label>
+
+      <span
+        id="fittingHeightValue"
+        class="eyeValue"
+      >
+        26 MM
+      </span>
+
+      <input
+        type="range"
+        id="fittingHeight"
+        min="16"
+        max="36"
+        step="1"
+        value="26"
+      >
+
+      <label>
+        FITTING POSITION
+      </label>
+
+      <span
+        id="eyePointValue"
+        class="eyeValue"
+      >
+        20 MM
+      </span>
+
+      <input
+        id="eyePointSlider"
+        type="range"
+        min="10"
+        max="30"
+        step="1"
+        value="20"
+        oninput="
+          eyePoint=parseInt(this.value);
+          updateEyeControls();
+          draw();
+        "
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="eyeControls">
+
+    <div class="eyeControl">
+
+
+
+      <label>
         NOSEPAD POSITION
       </label>
+
       <span
         id="nosepadValue"
         class="eyeValue"
       >
         7 MM
       </span>
+
       <input
         id="nosepadSlider"
         type="range"
@@ -909,73 +915,65 @@ background:linear-gradient(
       >
 
 
+      <label>
+        PUPIL DISTANCE
+      </label>
+
+      <span
+        class="eyeValue"
+        id="plotGapValue"
+      >
+        71 MM
+      </span>
+
+      <input
+        type="range"
+        id="plotGap"
+        min="56"
+        max="74"
+        step="1"
+        value="70"
+      >
 
     </div>
 
   </div>
 
-</div>
 
+  <div class="eyeControls">
 
-<div class="eyeControls">
+    <div class="eyeControl">
 
-  <div class="eyeControl">
+      <label>
+        FITTING HEIGHT FOR EDGING
+      </label>
 
-    <label>
-      FITTING HEIGHT FOR EDGING
-    </label>
+      <span
+        id="netFittingHeightValue"
+        class="eyeValue"
+      >
+        10 MM
+      </span>
 
-    <span
-      id="netFittingHeightValue"
-      class="eyeValue"
-    >
-      10 MM
-    </span>
+      <button
+        type="button"
+        onclick="toggleEyePoint()"
+        id="eyePointToggle"
+        class="eyePointToggle"
+      >
+        EYE POINT: ON
+      </button>
 
-
-  <button
-    type="button"
-    onclick="toggleEyePoint()"
-    id="eyePointToggle"
-    class="eyePointToggle"
-  >
-    EYE POINT: ON
-  </button>
-
-
-
-<label>
-  PUPIL DISTANCE
-</label>
-<span class="eyeValue" id="plotGapValue">
-  71 MM
-</span>
-<input
-  type="range"
-  id="plotGap"
-  min="56"
-  max="74"
-  step="1"
-  value="70"
->
-
-
-
-
-
-  </div>
 
 </div>
 
 </div>
-
-
 
 
 
 <script>
 
-let pageScale=.68;
+let pageScale=.672;
 
 
 function applyScale(){
