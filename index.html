@@ -756,7 +756,7 @@ background:linear-gradient(
         </label>
 
         <input
-          style="width:500px"
+          style="width:700px"
           id="far"
           type="range"
           min="-10"
@@ -776,6 +776,25 @@ background:linear-gradient(
 
       </div>
 
+    <div class="toggle">
+
+      <button id="addMode" class="active">
+        ADD
+      </button>
+
+      <button id="finalMode">
+        FINAL
+      </button>
+
+    </div>
+
+
+
+</div>
+</div>
+
+<div class="eyeControls">
+
 
       <div class="control">
 
@@ -784,6 +803,7 @@ background:linear-gradient(
         </label>
 
         <input
+style="width:700px"
           id="add"
           type="range"
           min="0.5"
@@ -804,26 +824,15 @@ background:linear-gradient(
       </div>
 
     </div>
+</div>
 
 
-    <div class="toggle">
-
-      <button id="addMode" class="active">
-        ADD
-      </button>
-
-      <button id="finalMode">
-        FINAL
-      </button>
-
-    </div>
-
-  </div>
 
 
 <!-- EYE POINT CONTROL -->
+<div class="panel">
 
-<div class="eyeControls">
+<div class="inputs">
 
   <div class="eyeControl">
 
@@ -966,7 +975,7 @@ background:linear-gradient(
 
 <script>
 
-let pageScale=.68;
+let pageScale=.672;
 
 
 function applyScale(){
@@ -2381,25 +2390,23 @@ function drawDesign1(
 
   plot.innerHTML="";
 
-
   drawHeat1(
     plot,
     add
   );
-
 
   addMarkers1(
     plot,
     plotIndex
   );
 
-
-addLine(
-  plot,
-  10,
-  formatPower(0)
-);
-
+  addLine(
+    plot,
+    10,
+    formatPower(
+      mode==="final" ? far : 0
+    )
+  );
 
   for(
     let power=.25;
@@ -2412,30 +2419,33 @@ addLine(
         power/add*100
       );
 
-
-addLine(
-  plot,
-  mm,
-  formatPower(power)
-);
+    addLine(
+      plot,
+      mm,
+      formatPower(
+        mode==="final"
+          ? far+power
+          : power
+      )
+    );
 
   }
-
 
   addLine(
     plot,
     38,
-  formatPower(add)
-
+    formatPower(
+      mode==="final"
+        ? far+add
+        : add
+    )
   );
-
 
   addZoneLabel(
     plot,
     10,
     "FAR"
   );
-
 
   addZoneLabel(
     plot,
@@ -2462,12 +2472,10 @@ function drawDesign2(
 
   plot.innerHTML="";
 
-
   const start=20;
 
   const end=
     start+corridor;
-
 
   drawHeat2(
     plot,
@@ -2475,21 +2483,19 @@ function drawDesign2(
     corridor
   );
 
-
   addMarkers2(
     plot,
     corridor,
     plotIndex
   );
 
-
   addLine(
     plot,
     start,
-  formatPower(0)
-
+    formatPower(
+      mode==="final" ? far : 0
+    )
   );
-
 
   for(
     let power=.25;
@@ -2503,31 +2509,33 @@ function drawDesign2(
         corridor
       );
 
-
     addLine(
       plot,
       mm,
-  formatPower(power)
-
+      formatPower(
+        mode==="final"
+          ? far+power
+          : power
+      )
     );
 
   }
 
-
   addLine(
     plot,
     end,
-  formatPower(add)
-
+    formatPower(
+      mode==="final"
+        ? far+add
+        : add
+    )
   );
-
 
   addZoneLabel(
     plot,
     16,
     "FAR"
   );
-
 
   addZoneLabel(
     plot,
