@@ -386,8 +386,8 @@ select{
 .cMarker{
   position:absolute;
   left:50%;
-  width:100px;
-  height:100px;
+  width:130px;
+  height:130px;
   transform:translate(-50%,-50%);
   border:2px solid #555;
   border-bottom-color:transparent;
@@ -430,8 +430,8 @@ select{
 .completeCircle{
   position:absolute;
   left:50%;
-  width:96px;
-  height:96px;
+  width:70px;
+  height:70px;
   transform:translate(-50%,-50%);
   border:2px solid #555;
   border-radius:50%;
@@ -2304,7 +2304,7 @@ function addMarkers1(plot,plotIndex){
   c.className="cMarker";
 
   c.style.top=
-    lensY(10)+"%";
+    lensY(9)+"%";
 
   plot.appendChild(c);
 
@@ -2326,7 +2326,7 @@ function addMarkers1(plot,plotIndex){
   circle.className="completeCircle";
 
   circle.style.top=
-    lensY(41.5)+"%";
+    lensY(40)+"%";
 
   circle.style.left=
     `calc(50% + ${
@@ -2361,7 +2361,7 @@ function addMarkers2(plot,corridor,plotIndex){
   farCircle.className="cMarker";
 
   farCircle.style.top=
-    lensY(16)+"%";
+    lensY(15)+"%";
 
   plot.appendChild(farCircle);
 
@@ -2378,7 +2378,7 @@ function addMarkers2(plot,corridor,plotIndex){
 
 
   const nearStart=
-    20+corridor+4.5;
+    20+corridor+3;
 
 
   const nearCircle=
