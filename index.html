@@ -767,7 +767,7 @@ background:linear-gradient(
         >
 
         <span class="sliderValue">
-          -2.00 D
+          0.00 D
         </span>
 
       </div>
@@ -1535,26 +1535,19 @@ function lensY(mm){
 
 function percent1(mm){
 
-  if(mm<=10)
+  if(mm<=14)
     return 0;
 
-  if(mm<=20)
-    return (mm-10)/10*12;
+  if(mm>=37)
+    return 100;
 
-  if(mm<=38)
-    return 12+(mm-20)/18*88;
-
-  return 100;
+  return (mm-14)/23*100;
 
 }
 
-
 function mmAtPercent1(p){
 
-  if(p<=12)
-    return 10+(p/12)*10;
-
-  return 20+((p-12)/88)*18;
+  return 14+(p/100)*23;
 
 }
 
@@ -1779,14 +1772,14 @@ function drawHeat1(plot,add){
     let next=mm+.25;
 
 
-    if(mm<10){
+if(mm<14){
 
-      regionPower=0;
+  regionPower=0;
 
-      next=10;
+  next=14;
 
 
-    }else if(mm<38){
+    }else if(mm<37){
 
       const currentPower=
         add*
@@ -1810,7 +1803,7 @@ function drawHeat1(plot,add){
 
         if(
           boundary>mm &&
-          boundary<38
+          boundary<37
         )
           next=boundary;
 
@@ -1823,7 +1816,7 @@ function drawHeat1(plot,add){
 
         regionPower=add;
 
-        next=38;
+        next=37;
 
       }
 
@@ -2333,7 +2326,7 @@ function addMarkers1(plot,plotIndex){
   circle.className="completeCircle";
 
   circle.style.top=
-    lensY(42.5)+"%";
+    lensY(41.5)+"%";
 
   circle.style.left=
     `calc(50% + ${
@@ -2445,7 +2438,7 @@ function drawDesign1(
 
   addLine(
     plot,
-    10,
+    14,
     formatPower(
       mode==="final" ? far : 0
     )
@@ -2476,7 +2469,7 @@ function drawDesign1(
 
   addLine(
     plot,
-    38,
+    37,
     formatPower(
       mode==="final"
         ? far+add
