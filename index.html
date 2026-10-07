@@ -278,7 +278,7 @@ select{
   bottom:0;
   left:474px;
   width:2px;
-  border-left:4px dotted #888;
+  border-left:4px dotted rgba(185,74,58,0.5);
   background:none;
   z-index:30;
   pointer-events:none;
@@ -457,8 +457,9 @@ select{
   width:120px;
   height:120px;
   transform:translate(-50%,-50%);
-  border:4px solid rgba(185,74,58,0.3);
-  border-radius:50%;
+border:4px solid transparent;
+border-left-color:rgba(185,74,58,0.3);
+border-right-color:rgba(185,74,58,0.3);  border-radius:50%;
   pointer-events:none;
   z-index:2;
 }
@@ -469,7 +470,7 @@ select{
   left:50%;
   top:50%;
   width:275px;
-  height:110px;
+  height:85px;
   transform:translate(-50%,-50%);
   border:4px solid rgba(185,74,58,0.3);
   border-radius:50%;
@@ -802,19 +803,6 @@ background:linear-gradient(
 
       </div>
 
-    <div class="toggle">
-
-      <button id="addMode" class="active">
-        ADD
-      </button>
-
-      <button id="finalMode">
-        FINAL
-      </button>
-
-    </div>
-
-
 
 </div>
 </div>
@@ -850,6 +838,46 @@ background:linear-gradient(
       </div>
 
     </div>
+<div class="eyeControls">
+
+ <div class="toggle">
+
+      <button id="addMode" class="active">
+        ADD
+      </button>
+
+      <button id="finalMode">
+        FINAL
+      </button>
+
+    </div>
+
+<div class="toggle">
+
+  <button id="circle840" class="active">
+    MYOPIA RX 70 MM Dia
+  </button>
+
+  <button id="circle780">
+    HYPEROPIA & PLANO RX 65 MM Dia
+  </button>
+
+</div>
+
+<button style="height:25px"
+  id="compareMode"
+  type="button"
+        class="eyePointToggle"
+
+>
+  <span>
+    LENS COMPARE
+  </span>
+</button>
+
+</div>
+
+
 </div>
 
 
@@ -1121,9 +1149,6 @@ updatePlotGap();
 
 <div class="panel">
 
-  <div class="sectionTitle">
-    HEAT MAP & LENS DESIGN
-  </div>
 
   <div class="panelRow">
 
@@ -1195,16 +1220,7 @@ style="width:700px"
 </div>
 </div>
 
-<button
-  id="compareMode"
-  type="button"
-        class="eyePointToggle"
 
->
-  <span>
-    LENS COMPARE
-  </span>
-</button>
 
 </div>
 </div>
@@ -2390,8 +2406,8 @@ bigCircle.style.position="absolute";
 bigCircle.style.left="50%";
 bigCircle.style.top=lensY(21.5)+"%";
 
-bigCircle.style.width="840px";
-bigCircle.style.height="840px";
+bigCircle.style.width=bigCircleSize+"px";
+bigCircle.style.height=bigCircleSize+"px";
 
 bigCircle.style.transform="translate(-50%,-50%)";
 
@@ -2499,8 +2515,8 @@ bigCircle.style.position="absolute";
 bigCircle.style.left="50%";
 bigCircle.style.top=lensY(24)+"%";
 
-bigCircle.style.width="840px";
-bigCircle.style.height="840px";
+bigCircle.style.width=bigCircleSize+"px";
+bigCircle.style.height=bigCircleSize+"px";
 
 bigCircle.style.transform="translate(-50%,-50%)";
 
@@ -2544,6 +2560,27 @@ plot.appendChild(bigCircle);
   addEyeMarkers(plot);
 
 }
+
+
+let bigCircleSize=840;
+
+document.getElementById("circle840").addEventListener("click",()=>{
+  bigCircleSize=840;
+
+  document.getElementById("circle840").classList.add("active");
+  document.getElementById("circle780").classList.remove("active");
+
+  draw();
+});
+
+document.getElementById("circle780").addEventListener("click",()=>{
+  bigCircleSize=780;
+
+  document.getElementById("circle780").classList.add("active");
+  document.getElementById("circle840").classList.remove("active");
+
+  draw();
+});
 
 
 /* =========================================================
