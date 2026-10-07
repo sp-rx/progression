@@ -398,8 +398,8 @@ select{
 .crossMarker{
   position:absolute;
   left:50%;
-  width:15px;
-  height:15px;
+  width:30px;
+  height:30px;
   transform:translate(-50%,-50%);
   pointer-events:none
 }
@@ -452,8 +452,36 @@ select{
 .eyeMarker{
   position:absolute;
   left:50%;
-  width:75px;
-  height:75px;
+  width:120px;
+  height:120px;
+  transform:translate(-50%,-50%);
+  border:4px solid rgba(185,74,58,0.3);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:2;
+}
+
+.eyeMarker::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:275px;
+  height:110px;
+  transform:translate(-50%,-50%);
+  border:4px solid rgba(185,74,58,0.3);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.eyeMarker::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:45px;
+  height:45px;
   transform:translate(-50%,-50%);
   border:6px solid rgba(185,74,58,0.7);
   border-radius:50%;
@@ -1375,10 +1403,10 @@ function addNosepad(plot,plotIndex){
   oval.style.position="absolute";
 
   oval.style.width=
-    (4/100*plot.clientHeight)+"px";
+    (2/100*plot.clientHeight)+"px";
 
   oval.style.height=
-    (8/100*plot.clientHeight)+"px";
+    (5/100*plot.clientHeight)+"px";
 
   const redCircleMM=16;
 
@@ -1386,7 +1414,7 @@ function addNosepad(plot,plotIndex){
     redCircleMM+nosepadPosition;
 
   const nasalOffset=
-    plotIndex===0 ? 20 : -20;
+    plotIndex===0 ? 30 : -30;
 
   oval.style.left=
     `calc(50% + ${nasalOffset}%)`;
@@ -1398,7 +1426,7 @@ function addNosepad(plot,plotIndex){
     "translate(-50%,-50%)";
 
   oval.style.border=
-    "6px solid rgba(185,74,58,0.7)";
+    "4px solid rgba(185,74,58,0.3)";
 
   oval.style.borderRadius="50%";
 
@@ -2321,6 +2349,57 @@ function addMarkers1(plot,plotIndex){
 
   plot.appendChild(cross);
 
+  /* TWO SMALL CIRCLES */
+
+  [-17,17].forEach(offset=>{
+
+    const smallCircle=
+      document.createElement("div");
+
+    smallCircle.style.position="absolute";
+    smallCircle.style.left=
+      `calc(50% + ${offset*12}px)`;
+
+    smallCircle.style.top=
+      lensY(22)+"%";
+
+    smallCircle.style.width="14px";
+    smallCircle.style.height="14px";
+
+    smallCircle.style.transform=
+      "translate(-50%,-50%)";
+
+    smallCircle.style.border=
+      "2px solid";
+
+    smallCircle.style.borderRadius="50%";
+
+    smallCircle.style.pointerEvents="none";
+
+    smallCircle.style.zIndex="20";
+
+    plot.appendChild(smallCircle);
+
+  });
+
+const bigCircle=document.createElement("div");
+
+bigCircle.style.position="absolute";
+bigCircle.style.left="50%";
+bigCircle.style.top=lensY(24)+"%";
+
+bigCircle.style.width="780px";
+bigCircle.style.height="780px";
+
+bigCircle.style.transform="translate(-50%,-50%)";
+
+bigCircle.style.border="2px dotted rgba(51,51,51,1)";
+bigCircle.style.borderRadius="50%";
+
+bigCircle.style.pointerEvents="none";
+bigCircle.style.zIndex="10";
+
+plot.appendChild(bigCircle);
 
   const circle=
     document.createElement("div");
@@ -2378,6 +2457,58 @@ function addMarkers2(plot,corridor,plotIndex){
 
   plot.appendChild(cross);
 
+
+  /* TWO SMALL CIRCLES */
+
+  [-17,17].forEach(offset=>{
+
+    const smallCircle=
+      document.createElement("div");
+
+    smallCircle.style.position="absolute";
+    smallCircle.style.left=
+      `calc(50% + ${offset*12}px)`;
+
+    smallCircle.style.top=
+      lensY(24)+"%";
+
+    smallCircle.style.width="14px";
+    smallCircle.style.height="14px";
+
+    smallCircle.style.transform=
+      "translate(-50%,-50%)";
+
+    smallCircle.style.border=
+      "2px solid";
+
+    smallCircle.style.borderRadius="50%";
+
+    smallCircle.style.pointerEvents="none";
+
+    smallCircle.style.zIndex="20";
+
+    plot.appendChild(smallCircle);
+
+  });
+
+const bigCircle=document.createElement("div");
+
+bigCircle.style.position="absolute";
+bigCircle.style.left="50%";
+bigCircle.style.top=lensY(24)+"%";
+
+bigCircle.style.width="780px";
+bigCircle.style.height="780px";
+
+bigCircle.style.transform="translate(-50%,-50%)";
+
+bigCircle.style.border="2px dotted rgba(51,51,51,1)";
+bigCircle.style.borderRadius="50%";
+
+bigCircle.style.pointerEvents="none";
+bigCircle.style.zIndex="10";
+
+plot.appendChild(bigCircle);
 
   const nearStart=
     20+corridor+3;
@@ -2481,14 +2612,14 @@ function drawDesign1(
 
   addZoneLabel(
     plot,
-    10,
-    "FAR"
+    9,
+   "FAR REFERENCE >>"
   );
 
   addZoneLabel(
     plot,
-    42.5,
-    "NEAR"
+    40,
+    "NEAR REFERENCE >>"
   );
 
 }
@@ -2571,14 +2702,14 @@ function drawDesign2(
 
   addZoneLabel(
     plot,
-    16,
-    "FAR"
+    14.5,
+    "FAR REFERENCE >>>"
   );
 
   addZoneLabel(
     plot,
-    end+4.5,
-    "NEAR"
+    end+3,
+    "NEAR REFERENCE >>"
   );
 
 }
