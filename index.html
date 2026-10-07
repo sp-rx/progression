@@ -386,14 +386,16 @@ select{
 .cMarker{
   position:absolute;
   left:50%;
-  width:130px;
-  height:130px;
+  width:105px;
+  height:105px;
   transform:translate(-50%,-50%);
   border:2px solid #555;
-  border-bottom-color:transparent;
+  border-bottom:5px solid transparent;
   border-radius:50%;
-  pointer-events:none
+  pointer-events:none;
 }
+
+
 
 .crossMarker{
   position:absolute;
@@ -957,7 +959,7 @@ background:linear-gradient(
         class="eyeValue"
         id="plotGapValue"
       >
-        69 MM
+        68 MM
       </span>
 
       <input
@@ -968,7 +970,7 @@ background:linear-gradient(
         min="56"
         max="74"
         step="1"
-        value="69"
+        value="68"
       >
 
     </div>
@@ -2334,7 +2336,7 @@ function addMarkers1(plot,plotIndex){
   c.className="cMarker";
 
   c.style.top=
-    lensY(9)+"%";
+    lensY(10)+"%";
 
   plot.appendChild(c);
 
@@ -2386,10 +2388,10 @@ const bigCircle=document.createElement("div");
 
 bigCircle.style.position="absolute";
 bigCircle.style.left="50%";
-bigCircle.style.top=lensY(24)+"%";
+bigCircle.style.top=lensY(21.5)+"%";
 
-bigCircle.style.width="780px";
-bigCircle.style.height="780px";
+bigCircle.style.width="840px";
+bigCircle.style.height="840px";
 
 bigCircle.style.transform="translate(-50%,-50%)";
 
@@ -2497,8 +2499,8 @@ bigCircle.style.position="absolute";
 bigCircle.style.left="50%";
 bigCircle.style.top=lensY(24)+"%";
 
-bigCircle.style.width="780px";
-bigCircle.style.height="780px";
+bigCircle.style.width="840px";
+bigCircle.style.height="840px";
 
 bigCircle.style.transform="translate(-50%,-50%)";
 
@@ -2612,7 +2614,7 @@ function drawDesign1(
 
   addZoneLabel(
     plot,
-    9,
+    9.5,
    "FAR REFERENCE >>"
   );
 
